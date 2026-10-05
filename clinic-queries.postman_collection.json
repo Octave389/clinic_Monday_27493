@@ -1,0 +1,128 @@
+{
+  "info": {
+    "name": "Clinic Management - Queries",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:1014" }
+  ],
+  "item": [
+    {
+      "name": "A1 Patients by last name (uwase)",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/patients/by-last-name?lastName=uwase",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "patients", "by-last-name"],
+          "query": [{ "key": "lastName", "value": "uwase" }]
+        }
+      }
+    },
+    {
+      "name": "A1 Patients by last name (UWASE - case test)",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/patients/by-last-name?lastName=UWASE",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "patients", "by-last-name"],
+          "query": [{ "key": "lastName", "value": "UWASE" }]
+        }
+      }
+    },
+    {
+      "name": "A1 Patients by last name (no match -> [])",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/patients/by-last-name?lastName=Smith",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "patients", "by-last-name"],
+          "query": [{ "key": "lastName", "value": "Smith" }]
+        }
+      }
+    },
+    {
+      "name": "A2 Appointments by status (SCHEDULED)",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/appointments/by-status?status=SCHEDULED",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "appointments", "by-status"],
+          "query": [{ "key": "status", "value": "SCHEDULED" }]
+        }
+      }
+    },
+    {
+      "name": "A2 Appointments by status (invalid -> 400)",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/appointments/by-status?status=WRONG",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "appointments", "by-status"],
+          "query": [{ "key": "status", "value": "WRONG" }]
+        }
+      }
+    },
+    {
+      "name": "A3 Appointments between dates",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/appointments/between?start=2026-10-01&end=2026-10-31",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "appointments", "between"],
+          "query": [
+            { "key": "start", "value": "2026-10-01" },
+            { "key": "end", "value": "2026-10-31" }
+          ]
+        }
+      }
+    },
+    {
+      "name": "A3 Appointments between (bad date -> 400)",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/appointments/between?start=abc&end=2026-10-31",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "appointments", "between"],
+          "query": [
+            { "key": "start", "value": "abc" },
+            { "key": "end", "value": "2026-10-31" }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Setup - Create appointment",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"patient\": { \"id\": \"32394660-3043-45c0-90dd-a391674dbede\" },\n  \"doctor\": { \"id\": \"PUT-DOCTOR-ID-HERE\" },\n  \"date\": \"2026-10-20T09:00:00\",\n  \"reason\": \"Checkup\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/appointment/save",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "appointment", "save"]
+        }
+      }
+    },
+    {
+      "name": "Setup - List doctors (to get an id)",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/doctor/all",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "doctor", "all"]
+        }
+      }
+    }
+  ]
+}
