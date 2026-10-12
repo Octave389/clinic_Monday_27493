@@ -76,6 +76,10 @@ public class PatientService {
         return patientRepo.findByLastNameIgnoreCaseOrderByFirstNameAsc(lastName.trim());
     }
 
+    public List<Patient> getFrequentPatients(long min) {
+        return patientRepo.findFrequentPatients(min);
+    }
+
     // empty means the doctor does not exist; an empty list means the doctor has no patients yet
     public Optional<List<Patient>> getPatientsOfDoctor(UUID doctorId) {
 

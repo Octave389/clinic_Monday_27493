@@ -5,7 +5,8 @@
   },
   "variable": [
     { "key": "baseUrl", "value": "http://localhost:1014" },
-    { "key": "doctorId", "value": "4c376bb6-0c7e-4554-8a0b-0317e8f31829" }
+    { "key": "doctorId", "value": "4c376bb6-0c7e-4554-8a0b-0317e8f31829" },
+    { "key": "officeId", "value": "41c01f78-0bfd-4019-96a9-155d7f50f6e3" }
   ],
   "item": [
     {
@@ -190,6 +191,71 @@
           "raw": "{{baseUrl}}/api/patients/of-doctor/00000000-0000-0000-0000-000000000000",
           "host": ["{{baseUrl}}"],
           "path": ["api", "patients", "of-doctor", "00000000-0000-0000-0000-000000000000"]
+        }
+      }
+    },
+    {
+      "name": "Setup - Give an office a name (for C3)",
+      "request": {
+        "method": "PUT",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Cardiology Wing\",\n  \"officeNumber\": \"101\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/offices/update/{{officeId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "offices", "update", "{{officeId}}"]
+        }
+      }
+    },
+    {
+      "name": "C1 Appointments per status",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/appointments/stats/by-status",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "appointments", "stats", "by-status"]
+        }
+      }
+    },
+    {
+      "name": "C2 Frequent patients (min=3)",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/patients/frequent?min=3",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "patients", "frequent"],
+          "query": [{ "key": "min", "value": "3" }]
+        }
+      }
+    },
+    {
+      "name": "C3 Busiest office",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/offices/busiest",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "offices", "busiest"]
+        }
+      }
+    },
+    {
+      "name": "C4 Doctor is absent (cancel a day)",
+      "request": {
+        "method": "PATCH",
+        "url": {
+          "raw": "{{baseUrl}}/api/appointments/cancel-day?doctorId={{doctorId}}&date=2026-10-20",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "appointments", "cancel-day"],
+          "query": [
+            { "key": "doctorId", "value": "{{doctorId}}" },
+            { "key": "date", "value": "2026-10-20" }
+          ]
         }
       }
     }

@@ -21,4 +21,10 @@ public interface PatientRepository extends JpaRepository<Patient, UUID> {
     // B4: Patient has no link to its appointments, so the query starts from Appointment
     @Query("SELECT DISTINCT a.patient FROM Appointment a WHERE a.doctor.id = :doctorId")
     List<Patient> findPatientsOfDoctor(@Param("doctorId") UUID doctorId);
+
+    // C2
+    @Query("SELECT p FROM Appointment a JOIN a.patient p "
+            + "GROUP BY p HAVING COUNT(a) >= :min "
+            + "ORDER BY COUNT(a) DESC, p.lastName ASC, p.firstName ASC")
+    List<Patient> findFrequentPatients(@Param("min") long min);
 }

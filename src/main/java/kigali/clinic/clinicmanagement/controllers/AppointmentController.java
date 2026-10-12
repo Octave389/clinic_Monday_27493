@@ -4,6 +4,7 @@ import kigali.clinic.clinicmanagement.models.Appointment;
 import kigali.clinic.clinicmanagement.services.AppointmentService;
 import kigali.clinic.clinicmanagement.utils.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -71,6 +72,17 @@ public class AppointmentController {
 
         return ResponseEntity.ok(appointmentService.getAppointmentsBetween(
                 startDate.atStartOfDay(), endDate.atTime(LocalTime.MAX)));
+    }
+
+    @GetMapping(value = "/stats/by-status", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getAppointmentCountsByStatus() {
+        return ResponseEntity.ok(appointmentService.getAppointmentCountsByStatus());
+    }
+
+    @PatchMapping(value = "/cancel-day", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> cancelDoctorDay(@RequestParam UUID doctorId,
+                                             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+        return ResponseEntity.ok(Map.of("message", appointmentService.cancelDoctorDay(doctorId, date)));
     }
 
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)

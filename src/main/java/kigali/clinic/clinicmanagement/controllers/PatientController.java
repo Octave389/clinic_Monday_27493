@@ -40,6 +40,11 @@ public class PatientController {
         return ResponseEntity.ok(patientService.getPatientsByLastName(lastName));
     }
 
+    @GetMapping(value = "/frequent", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getFrequentPatients(@RequestParam long min) {
+        return ResponseEntity.ok(patientService.getFrequentPatients(min));
+    }
+
     @GetMapping(value = "/of-doctor/{doctorId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getPatientsOfDoctor(@PathVariable UUID doctorId) {
         return ApiResponses.fromData(patientService.getPatientsOfDoctor(doctorId).orElse(null),

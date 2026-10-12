@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
 @RestController
-@RequestMapping(value = "/api/office")
+@RequestMapping(value = {"/api/office", "/api/offices"})
 public class OfficeController {
 
     @Autowired
@@ -33,6 +33,11 @@ public class OfficeController {
     @GetMapping(value = "/all", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getAllOffices() {
         return ResponseEntity.ok(officeService.getAllOffices());
+    }
+
+    @GetMapping(value = "/busiest", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getBusiestOffice() {
+        return ApiResponses.fromData(officeService.getBusiestOffice().orElse(null), "No appointments yet");
     }
 
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)

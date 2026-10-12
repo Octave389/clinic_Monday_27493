@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -131,6 +132,20 @@ public class AppointmentService {
 
     public List<Appointment> getAppointmentsBetween(LocalDateTime start, LocalDateTime end) {
         return appointmentRepo.findByDateBetweenOrderByDateAsc(start, end);
+    }
+
+    public List<Object[]> getAppointmentCountsByStatus() {
+        return appointmentRepo.countAppointmentsPerStatus();
+    }
+
+    // COMPLETED visits stay untouched; already CANCELLED ones are skipped so the count is only what changed
+    @Transactional
+    public String cancelDoctorDay(UUID doctorId, LocalDate date) {
+
+        int cancelled = appointmentRepo.cancelDoctorDay(
+                doctorId, date.atStartOfDay(), date.plusDays(1).atStartOfDay(), LocalDateTime.now());
+
+        return cancelled + " appointments cancelled";
     }
 
     public boolean isValidStatus(String status) {
