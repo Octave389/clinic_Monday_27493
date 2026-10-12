@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
 @RestController
-@RequestMapping(value = "/api/doctor")
+@RequestMapping(value = {"/api/doctor", "/api/doctors"})
 public class DoctorController {
 
     @Autowired
@@ -33,6 +33,16 @@ public class DoctorController {
     @GetMapping(value = "/all", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getAllDoctors() {
         return ResponseEntity.ok(doctorService.getAllDoctors());
+    }
+
+    @GetMapping(value = "/by-specialization", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getDoctorsBySpecialization(@RequestParam String name) {
+        return ResponseEntity.ok(doctorService.getDoctorsBySpecialization(name));
+    }
+
+    @GetMapping(value = "/without-office", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getDoctorsWithoutOffice() {
+        return ResponseEntity.ok(doctorService.getDoctorsWithoutOffice());
     }
 
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)

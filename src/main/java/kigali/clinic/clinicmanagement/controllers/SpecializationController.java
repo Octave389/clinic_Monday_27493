@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
 @RestController
-@RequestMapping(value = "/api/specialization")
+@RequestMapping(value = {"/api/specialization", "/api/specializations"})
 public class SpecializationController {
 
     @Autowired
@@ -34,6 +34,11 @@ public class SpecializationController {
     @GetMapping(value = "/all", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getAllSpecializations() {
         return ResponseEntity.ok(specializationService.getAllSpecializations());
+    }
+
+    @GetMapping(value = "/unused", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getUnusedSpecializations() {
+        return ResponseEntity.ok(specializationService.getUnusedSpecializations());
     }
 
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)

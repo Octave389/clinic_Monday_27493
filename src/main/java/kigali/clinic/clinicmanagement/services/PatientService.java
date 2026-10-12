@@ -2,12 +2,14 @@ package kigali.clinic.clinicmanagement.services;
 
 import kigali.clinic.clinicmanagement.models.Patient;
 import kigali.clinic.clinicmanagement.repositories.AppointmentRepository;
+import kigali.clinic.clinicmanagement.repositories.DoctorRepository;
 import kigali.clinic.clinicmanagement.repositories.PatientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import static kigali.clinic.clinicmanagement.utils.Validations.containsDigit;
@@ -22,6 +24,9 @@ public class PatientService {
 
     @Autowired
     private AppointmentRepository appointmentRepo;
+
+    @Autowired
+    private DoctorRepository doctorRepo;
 
     @Transactional
     public String savePatient(Patient patient) {
@@ -69,6 +74,16 @@ public class PatientService {
 
     public List<Patient> getPatientsByLastName(String lastName) {
         return patientRepo.findByLastNameIgnoreCaseOrderByFirstNameAsc(lastName.trim());
+    }
+
+    // empty means the doctor does not exist; an empty list means the doctor has no patients yet
+    public Optional<List<Patient>> getPatientsOfDoctor(UUID doctorId) {
+
+        if (!doctorRepo.existsById(doctorId)) {
+            return Optional.empty();
+        }
+
+        return Optional.of(patientRepo.findPatientsOfDoctor(doctorId));
     }
 
     public Patient getPatientById(UUID id) {

@@ -4,7 +4,8 @@
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "variable": [
-    { "key": "baseUrl", "value": "http://localhost:1014" }
+    { "key": "baseUrl", "value": "http://localhost:1014" },
+    { "key": "doctorId", "value": "4c376bb6-0c7e-4554-8a0b-0317e8f31829" }
   ],
   "item": [
     {
@@ -121,6 +122,74 @@
           "raw": "{{baseUrl}}/api/doctor/all",
           "host": ["{{baseUrl}}"],
           "path": ["api", "doctor", "all"]
+        }
+      }
+    },
+    {
+      "name": "B1 Doctors by specialization (cardiology)",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/doctors/by-specialization?name=cardiology",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "doctors", "by-specialization"],
+          "query": [{ "key": "name", "value": "cardiology" }]
+        }
+      }
+    },
+    {
+      "name": "B1 Doctors by specialization (CARDIOLOGY - case test)",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/doctors/by-specialization?name=CARDIOLOGY",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "doctors", "by-specialization"],
+          "query": [{ "key": "name", "value": "CARDIOLOGY" }]
+        }
+      }
+    },
+    {
+      "name": "B2 Doctors without an office",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/doctors/without-office",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "doctors", "without-office"]
+        }
+      }
+    },
+    {
+      "name": "B3 Specializations nobody offers",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/specializations/unused",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "specializations", "unused"]
+        }
+      }
+    },
+    {
+      "name": "B4 Patients of a doctor",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/patients/of-doctor/{{doctorId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "patients", "of-doctor", "{{doctorId}}"]
+        }
+      }
+    },
+    {
+      "name": "B4 Patients of a doctor (unknown id -> 404)",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/patients/of-doctor/00000000-0000-0000-0000-000000000000",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "patients", "of-doctor", "00000000-0000-0000-0000-000000000000"]
         }
       }
     }

@@ -40,6 +40,12 @@ public class PatientController {
         return ResponseEntity.ok(patientService.getPatientsByLastName(lastName));
     }
 
+    @GetMapping(value = "/of-doctor/{doctorId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getPatientsOfDoctor(@PathVariable UUID doctorId) {
+        return ApiResponses.fromData(patientService.getPatientsOfDoctor(doctorId).orElse(null),
+                "The doctor with that id does not exist");
+    }
+
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getPatientById(@PathVariable UUID id) {
         return ApiResponses.fromData(patientService.getPatientById(id), "Patient not found");
