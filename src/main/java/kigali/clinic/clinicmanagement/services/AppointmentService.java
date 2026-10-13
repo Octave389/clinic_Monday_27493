@@ -16,15 +16,15 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import static kigali.clinic.clinicmanagement.models.AppointmentStatus.CANCELLED;
 import static kigali.clinic.clinicmanagement.models.AppointmentStatus.COMPLETED;
 import static kigali.clinic.clinicmanagement.models.AppointmentStatus.CONFIRMED;
 import static kigali.clinic.clinicmanagement.models.AppointmentStatus.SCHEDULED;
+import static kigali.clinic.clinicmanagement.utils.Dates.endOfDay;
 import static kigali.clinic.clinicmanagement.utils.Validations.normalize;
 
 @Service
@@ -217,6 +217,24 @@ public class AppointmentService {
         return deleted + " appointments deleted";
     }
 
+    // D1: empty means the doctor does not exist
+    public Optional<List<Appointment>> getDoctorAgenda(UUID doctorId, LocalDate date) {
+
+        if (!doctorRepo.existsById(doctorId)) {
+            return Optional.empty();
+        }
+
+        return Optional.of(appointmentRepo.findByDoctorIdAndAppointmentDateBetweenAndStatusNotOrderByAppointmentDateAsc(
+                doctorId, date.atStartOfDay(), endOfDay(date), CANCELLED));
+    }
+
+    // D2: empty means no patient has that ss number
+    public Optional<List<Appointment>> getUpcomingAppointments(String ssNumber) {
+        return patientRepo.findBySsNumber(ssNumber.trim()).map(patient ->
+                appointmentRepo.findByPatientAndAppointmentDateGreaterThanEqualAndStatusInOrderByAppointmentDateAsc(
+                        patient, LocalDate.now().atStartOfDay(), List.of(SCHEDULED, CONFIRMED)));
+    }
+
     public Appointment getAppointmentById(UUID id) {
         return appointmentRepo.findById(id).orElse(null);
     }
@@ -260,10 +278,6 @@ public class AppointmentService {
                         doctorId, day.atStartOfDay(), endOfDay(day), CANCELLED)
                 : appointmentRepo.existsByDoctorIdAndAppointmentDateBetweenAndStatusNotAndIdNot(
                         doctorId, day.atStartOfDay(), endOfDay(day), CANCELLED, ignoredId);
-    }
-
-    private static LocalDateTime endOfDay(LocalDate day) {
-        return day.atTime(LocalTime.MAX).truncatedTo(ChronoUnit.MICROS);
     }
 
     private String resolvePatient(Appointment appointment) {

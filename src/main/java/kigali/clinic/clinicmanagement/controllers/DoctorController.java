@@ -1,13 +1,16 @@
 package kigali.clinic.clinicmanagement.controllers;
 
 import kigali.clinic.clinicmanagement.models.Doctor;
+import kigali.clinic.clinicmanagement.services.AppointmentService;
 import kigali.clinic.clinicmanagement.services.DoctorService;
 import kigali.clinic.clinicmanagement.utils.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
 @RestController
@@ -16,6 +19,9 @@ public class DoctorController {
 
     @Autowired
     private DoctorService doctorService;
+
+    @Autowired
+    private AppointmentService appointmentService;
 
     @PostMapping("/save")
     public ResponseEntity<?> saveDoctor(@RequestBody Doctor doctor) {
@@ -40,6 +46,18 @@ public class DoctorController {
     @GetMapping("/without-office")
     public ResponseEntity<?> getDoctorsWithoutOffice() {
         return ResponseEntity.ok(doctorService.getDoctorsWithoutOffice());
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<?> searchDoctors(@RequestParam String name) {
+        return ResponseEntity.ok(doctorService.searchDoctors(name));
+    }
+
+    @GetMapping("/{doctorId}/agenda")
+    public ResponseEntity<?> getAgenda(@PathVariable UUID doctorId,
+                                       @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+        return ApiResponses.fromData(appointmentService.getDoctorAgenda(doctorId, date).orElse(null),
+                DoctorService.DOCTOR_NOT_FOUND);
     }
 
     @PutMapping("/{doctorId}/specializations/{specializationId}")

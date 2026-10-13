@@ -29,4 +29,11 @@ public interface DoctorRepository extends JpaRepository<Doctor, UUID> {
     // B2
     @Query("SELECT d FROM Doctor d WHERE d.office IS NULL ORDER BY d.lastName ASC, d.firstName ASC")
     List<Doctor> findDoctorsWithoutOffice();
+
+    // D3: "gis" matches Mugisha; LOWER on both sides ignores letter case
+    @Query("SELECT d FROM Doctor d "
+            + "WHERE LOWER(d.firstName) LIKE LOWER(CONCAT('%', :name, '%')) "
+            + "OR LOWER(d.lastName) LIKE LOWER(CONCAT('%', :name, '%')) "
+            + "ORDER BY d.lastName ASC, d.firstName ASC")
+    List<Doctor> searchByName(@Param("name") String name);
 }

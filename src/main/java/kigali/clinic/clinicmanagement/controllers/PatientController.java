@@ -1,6 +1,7 @@
 package kigali.clinic.clinicmanagement.controllers;
 
 import kigali.clinic.clinicmanagement.models.Patient;
+import kigali.clinic.clinicmanagement.services.AppointmentService;
 import kigali.clinic.clinicmanagement.services.PatientService;
 import kigali.clinic.clinicmanagement.utils.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,9 @@ public class PatientController {
 
     @Autowired
     private PatientService patientService;
+
+    @Autowired
+    private AppointmentService appointmentService;
 
     @PostMapping("/save")
     public ResponseEntity<?> savePatient(@RequestBody Patient patient) {
@@ -46,6 +50,12 @@ public class PatientController {
     public ResponseEntity<?> getPatientsOfDoctor(@PathVariable UUID doctorId) {
         return ApiResponses.fromData(patientService.getPatientsOfDoctor(doctorId).orElse(null),
                 "The doctor with that id does not exist");
+    }
+
+    @GetMapping("/{ssNumber}/upcoming")
+    public ResponseEntity<?> getUpcomingAppointments(@PathVariable String ssNumber) {
+        return ApiResponses.fromData(appointmentService.getUpcomingAppointments(ssNumber).orElse(null),
+                "That patient with that ssnumber does not exist");
     }
 
     @GetMapping("/{id}")

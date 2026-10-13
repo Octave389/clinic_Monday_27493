@@ -520,6 +520,92 @@
           }
         }
       ]
+    },
+    {
+      "name": "Part D - Agenda and reports",
+      "item": [
+        {
+          "name": "D1 Alice's agenda on 2026-10-20, CANCELLED hidden",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/doctors/{{aliceId}}/agenda?date=2026-10-20",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "doctors", "{{aliceId}}", "agenda"],
+              "query": [{ "key": "date", "value": "2026-10-20" }]
+            }
+          }
+        },
+        {
+          "name": "D1 Unknown doctor (404)",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/doctors/{{unknownId}}/agenda?date=2026-10-20",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "doctors", "{{unknownId}}", "agenda"],
+              "query": [{ "key": "date", "value": "2026-10-20" }]
+            }
+          }
+        },
+        {
+          "name": "D2 Diane's upcoming appointments (ssNumber)",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/patients/{{ssNumber}}/upcoming",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "patients", "{{ssNumber}}", "upcoming"]
+            }
+          }
+        },
+        {
+          "name": "D2 Unknown ss number (404)",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/patients/9999/upcoming",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "patients", "9999", "upcoming"]
+            }
+          }
+        },
+        {
+          "name": "D3 Search doctors by name (mana)",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/doctors/search?name=mana",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "doctors", "search"],
+              "query": [{ "key": "name", "value": "mana" }]
+            }
+          }
+        },
+        {
+          "name": "D3 No match -> [] (gis)",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/doctors/search?name=gis",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "doctors", "search"],
+              "query": [{ "key": "name", "value": "gis" }]
+            }
+          }
+        },
+        {
+          "name": "D4 Clinic dashboard",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/dashboard/summary",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "dashboard", "summary"]
+            }
+          }
+        }
+      ]
     }
   ]
 }

@@ -2,6 +2,7 @@ package kigali.clinic.clinicmanagement.repositories;
 
 import kigali.clinic.clinicmanagement.models.Appointment;
 import kigali.clinic.clinicmanagement.models.AppointmentStatus;
+import kigali.clinic.clinicmanagement.models.Patient;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -29,6 +30,19 @@ public interface AppointmentRepository extends JpaRepository<Appointment, UUID> 
     boolean existsByDoctorId(UUID doctorId);
 
     boolean existsByPatientId(UUID patientId);
+
+    // D1
+    List<Appointment> findByDoctorIdAndAppointmentDateBetweenAndStatusNotOrderByAppointmentDateAsc(
+            UUID doctorId, LocalDateTime dayStart, LocalDateTime dayEnd, AppointmentStatus status);
+
+    // D2
+    List<Appointment> findByPatientAndAppointmentDateGreaterThanEqualAndStatusInOrderByAppointmentDateAsc(
+            Patient patient, LocalDateTime from, List<AppointmentStatus> statuses);
+
+    // D4
+    long countByAppointmentDateBetween(LocalDateTime start, LocalDateTime end);
+
+    long countByStatus(AppointmentStatus status);
 
     // C1: a status nobody uses forms no group, so it does not show up
     @Query("SELECT a.status, COUNT(a) FROM Appointment a "

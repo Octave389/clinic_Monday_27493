@@ -116,6 +116,10 @@ public class DoctorService {
         return doctorRepo.findDoctorsWithoutOffice();
     }
 
+    public List<Doctor> searchDoctors(String name) {
+        return doctorRepo.searchByName(name.trim());
+    }
+
     public Doctor getDoctorById(UUID id) {
         return doctorRepo.findById(id).orElse(null);
     }

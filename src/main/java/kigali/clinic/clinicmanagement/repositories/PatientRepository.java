@@ -7,6 +7,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Repository
@@ -21,6 +22,8 @@ public interface PatientRepository extends JpaRepository<Patient, UUID> {
     boolean existsBySsNumber(String ssNumber);
 
     boolean existsBySsNumberAndIdNot(String ssNumber, UUID id);
+
+    Optional<Patient> findBySsNumber(String ssNumber);
 
     // B4: Patient has no link to its appointments, so the query starts from Appointment
     @Query("SELECT DISTINCT a.patient FROM Appointment a WHERE a.doctor.id = :doctorId")
