@@ -80,6 +80,10 @@ public class OfficeService {
         return officeRepo.findAll();
     }
 
+    public List<Office> getFreeOffices() {
+        return officeRepo.findFreeOffices();
+    }
+
     // row is [name, officeNumber, appointmentCount]; a one-row page keeps only the top office
     public Optional<Object[]> getBusiestOffice() {
         return officeRepo.findOfficesByAppointmentCount(PageRequest.of(0, 1)).stream().findFirst();

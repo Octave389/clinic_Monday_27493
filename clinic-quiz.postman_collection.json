@@ -258,6 +258,34 @@
           ]
         }
       }
+    },
+    {
+      "name": "Bonus Appointments page by page",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/appointments/page?page=0&size=5&sort=appointmentDate,desc",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "appointments", "page"],
+          "query": [
+            { "key": "page", "value": "0" },
+            { "key": "size", "value": "5" },
+            { "key": "sort", "value": "appointmentDate,desc" }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Bonus Clean old cancellations",
+      "request": {
+        "method": "DELETE",
+        "url": {
+          "raw": "{{baseUrl}}/api/appointments/cancelled-before?date=2026-10-15",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "appointments", "cancelled-before"],
+          "query": [{ "key": "date", "value": "2026-10-15" }]
+        }
+      }
     }
   ]
 }

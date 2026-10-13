@@ -49,4 +49,11 @@ public interface AppointmentRepository extends JpaRepository<Appointment, UUID> 
                         @Param("dayStart") LocalDateTime dayStart,
                         @Param("nextDayStart") LocalDateTime nextDayStart,
                         @Param("now") LocalDateTime now);
+
+    // bonus: one JPQL DELETE, nothing is loaded first
+    @Modifying(clearAutomatically = true)
+    @Query("DELETE FROM Appointment a "
+            + "WHERE a.status = kigali.clinic.clinicmanagement.models.AppointmentStatus.CANCELLED "
+            + "AND a.appointmentDate < :date")
+    int deleteCancelledBefore(@Param("date") LocalDateTime date);
 }

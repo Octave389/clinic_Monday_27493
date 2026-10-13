@@ -35,6 +35,11 @@ public class OfficeController {
         return ResponseEntity.ok(officeService.getAllOffices());
     }
 
+    @GetMapping(value = "/free", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getFreeOffices() {
+        return ResponseEntity.ok(officeService.getFreeOffices());
+    }
+
     @GetMapping(value = "/busiest", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getBusiestOffice() {
         return ApiResponses.fromData(officeService.getBusiestOffice().orElse(null), "No appointments yet");

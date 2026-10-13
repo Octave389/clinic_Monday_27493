@@ -8,6 +8,8 @@ import kigali.clinic.clinicmanagement.repositories.AppointmentRepository;
 import kigali.clinic.clinicmanagement.repositories.DoctorRepository;
 import kigali.clinic.clinicmanagement.repositories.PatientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -138,7 +140,6 @@ public class AppointmentService {
         return appointmentRepo.countAppointmentsPerStatus();
     }
 
-    // COMPLETED visits stay untouched; already CANCELLED ones are skipped so the count is only what changed
     @Transactional
     public String cancelDoctorDay(UUID doctorId, LocalDate date) {
 
@@ -146,6 +147,18 @@ public class AppointmentService {
                 doctorId, date.atStartOfDay(), date.plusDays(1).atStartOfDay(), LocalDateTime.now());
 
         return cancelled + " appointments cancelled";
+    }
+
+    public Page<Appointment> getAppointmentsPage(Pageable pageable) {
+        return appointmentRepo.findAll(pageable);
+    }
+
+    @Transactional
+    public String deleteCancelledBefore(LocalDate date) {
+
+        int deleted = appointmentRepo.deleteCancelledBefore(date.atStartOfDay());
+
+        return deleted + " appointments deleted";
     }
 
     public Appointment getAppointmentById(UUID id) {
@@ -166,7 +179,6 @@ public class AppointmentService {
         return "Appointment is deleted Successfully";
     }
 
-    // a CANCELLED appointment does not hold the day, so it never blocks and is never blocked
     private boolean isDoctorBooked(Appointment appointment, UUID ignoredId) {
 
         if (appointment.getStatus() == AppointmentStatus.CANCELLED) {
@@ -183,7 +195,6 @@ public class AppointmentService {
                         doctorId, day.atStartOfDay(), endOfDay(day), AppointmentStatus.CANCELLED, ignoredId);
     }
 
-    // Postgres keeps microseconds, so LocalTime.MAX would round up to midnight of the next day
     private static LocalDateTime endOfDay(LocalDate day) {
         return day.atTime(LocalTime.MAX).truncatedTo(ChronoUnit.MICROS);
     }

@@ -1,5 +1,6 @@
 package kigali.clinic.clinicmanagement.utils;
 
+import org.springframework.data.core.PropertyReferenceException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -33,5 +34,11 @@ public class ApiExceptionHandler {
         }
 
         return ResponseEntity.badRequest().body(Map.of("message", "Invalid value for " + e.getName()));
+    }
+
+    // an unknown sort property on the paging endpoint, e.g. sort=colour,desc
+    @ExceptionHandler(PropertyReferenceException.class)
+    public ResponseEntity<?> handleUnknownProperty(PropertyReferenceException e) {
+        return ResponseEntity.badRequest().body(Map.of("message", "Unknown sort property " + e.getPropertyName()));
     }
 }

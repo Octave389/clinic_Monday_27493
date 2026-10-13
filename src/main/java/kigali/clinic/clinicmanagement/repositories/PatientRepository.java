@@ -18,6 +18,10 @@ public interface PatientRepository extends JpaRepository<Patient, UUID> {
 
     boolean existsByFirstNameIgnoreCaseAndLastNameIgnoreCaseAndIdNot(String firstName, String lastName, UUID id);
 
+    boolean existsBySsNumber(String ssNumber);
+
+    boolean existsBySsNumberAndIdNot(String ssNumber, UUID id);
+
     // B4: Patient has no link to its appointments, so the query starts from Appointment
     @Query("SELECT DISTINCT a.patient FROM Appointment a WHERE a.doctor.id = :doctorId")
     List<Patient> findPatientsOfDoctor(@Param("doctorId") UUID doctorId);

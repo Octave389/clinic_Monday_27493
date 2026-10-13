@@ -45,9 +45,24 @@ public class DoctorController {
         return ResponseEntity.ok(doctorService.getDoctorsWithoutOffice());
     }
 
+    @PutMapping(value = "/{doctorId}/specializations/{specializationId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> addSpecialization(@PathVariable UUID doctorId, @PathVariable UUID specializationId) {
+        return ApiResponses.fromMessage(doctorService.addSpecialization(doctorId, specializationId), HttpStatus.OK);
+    }
+
+    @DeleteMapping(value = "/{doctorId}/specializations/{specializationId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> removeSpecialization(@PathVariable UUID doctorId, @PathVariable UUID specializationId) {
+        return ApiResponses.fromMessage(doctorService.removeSpecialization(doctorId, specializationId), HttpStatus.OK);
+    }
+
+    @PatchMapping(value = "/{doctorId}/office", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> changeOffice(@PathVariable UUID doctorId, @RequestParam String officeNumber) {
+        return ApiResponses.fromMessage(doctorService.changeOffice(doctorId, officeNumber), HttpStatus.OK);
+    }
+
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getDoctorById(@PathVariable UUID id) {
-        return ApiResponses.fromData(doctorService.getDoctorById(id), "Doctor not found");
+        return ApiResponses.fromData(doctorService.getDoctorById(id), DoctorService.DOCTOR_NOT_FOUND);
     }
 
     @DeleteMapping(value = "/delete/{id}", produces = MediaType.APPLICATION_JSON_VALUE)

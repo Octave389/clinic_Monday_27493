@@ -5,6 +5,9 @@ import kigali.clinic.clinicmanagement.models.AppointmentStatus;
 import kigali.clinic.clinicmanagement.services.AppointmentService;
 import kigali.clinic.clinicmanagement.utils.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -68,6 +71,37 @@ public class AppointmentController {
     public ResponseEntity<?> cancelDoctorDay(@RequestParam UUID doctorId,
                                              @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
         return ResponseEntity.ok(Map.of("message", appointmentService.cancelDoctorDay(doctorId, date)));
+    }
+
+    // bonus: sort arrives as "property,direction", e.g. appointmentDate,desc
+    @GetMapping(value = "/page", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getAppointmentsPage(@RequestParam(defaultValue = "0") int page,
+                                                 @RequestParam(defaultValue = "5") int size,
+                                                 @RequestParam(defaultValue = "appointmentDate,asc") String sort) {
+
+        if (page < 0 || size < 1) {
+            return ResponseEntity.badRequest().body(Map.of("message", "Page must be 0 or more and size at least 1"));
+        }
+
+        String[] parts = sort.split(",");
+        String property = parts[0].trim();
+        Sort.Direction direction = parts.length > 1
+                ? Sort.Direction.fromOptionalString(parts[1].trim()).orElse(null)
+                : Sort.Direction.ASC;
+
+        if (property.isEmpty() || direction == null) {
+            return ResponseEntity.badRequest().body(Map.of("message", "Sort must look like appointmentDate,desc"));
+        }
+
+        Pageable pageable = PageRequest.of(page, size, Sort.by(direction, property));
+
+        return ResponseEntity.ok(appointmentService.getAppointmentsPage(pageable));
+    }
+
+    @DeleteMapping(value = "/cancelled-before", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> deleteCancelledBefore(
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+        return ResponseEntity.ok(Map.of("message", appointmentService.deleteCancelledBefore(date)));
     }
 
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
