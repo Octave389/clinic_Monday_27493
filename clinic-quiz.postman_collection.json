@@ -1,291 +1,574 @@
 {
   "info": {
+    "_postman_id": "0754ef97-9903-4246-8b12-bfd9da6b4ae7",
     "name": "Clinic Management - Queries",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
-  "variable": [
-    { "key": "baseUrl", "value": "http://localhost:1014" },
-    { "key": "doctorId", "value": "4c376bb6-0c7e-4554-8a0b-0317e8f31829" },
-    { "key": "officeId", "value": "41c01f78-0bfd-4019-96a9-155d7f50f6e3" }
-  ],
   "item": [
     {
       "name": "A1 Patients by last name (uwase)",
       "request": {
         "method": "GET",
+        "header": [],
         "url": {
           "raw": "{{baseUrl}}/api/patients/by-last-name?lastName=uwase",
-          "host": ["{{baseUrl}}"],
-          "path": ["api", "patients", "by-last-name"],
-          "query": [{ "key": "lastName", "value": "uwase" }]
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "patients",
+            "by-last-name"
+          ],
+          "query": [
+            {
+              "key": "lastName",
+              "value": "uwase"
+            }
+          ]
         }
-      }
+      },
+      "response": []
     },
     {
       "name": "A1 Patients by last name (UWASE - case test)",
       "request": {
         "method": "GET",
+        "header": [],
         "url": {
           "raw": "{{baseUrl}}/api/patients/by-last-name?lastName=UWASE",
-          "host": ["{{baseUrl}}"],
-          "path": ["api", "patients", "by-last-name"],
-          "query": [{ "key": "lastName", "value": "UWASE" }]
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "patients",
+            "by-last-name"
+          ],
+          "query": [
+            {
+              "key": "lastName",
+              "value": "UWASE"
+            }
+          ]
         }
-      }
+      },
+      "response": []
     },
     {
       "name": "A1 Patients by last name (no match -> [])",
       "request": {
         "method": "GET",
+        "header": [],
         "url": {
           "raw": "{{baseUrl}}/api/patients/by-last-name?lastName=Smith",
-          "host": ["{{baseUrl}}"],
-          "path": ["api", "patients", "by-last-name"],
-          "query": [{ "key": "lastName", "value": "Smith" }]
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "patients",
+            "by-last-name"
+          ],
+          "query": [
+            {
+              "key": "lastName",
+              "value": "Smith"
+            }
+          ]
         }
-      }
+      },
+      "response": []
     },
     {
       "name": "A2 Appointments by status (SCHEDULED)",
       "request": {
         "method": "GET",
+        "header": [],
         "url": {
           "raw": "{{baseUrl}}/api/appointments/by-status?status=SCHEDULED",
-          "host": ["{{baseUrl}}"],
-          "path": ["api", "appointments", "by-status"],
-          "query": [{ "key": "status", "value": "SCHEDULED" }]
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "appointments",
+            "by-status"
+          ],
+          "query": [
+            {
+              "key": "status",
+              "value": "SCHEDULED"
+            }
+          ]
         }
-      }
+      },
+      "response": []
     },
     {
       "name": "A2 Appointments by status (invalid -> 400)",
       "request": {
         "method": "GET",
+        "header": [],
         "url": {
           "raw": "{{baseUrl}}/api/appointments/by-status?status=WRONG",
-          "host": ["{{baseUrl}}"],
-          "path": ["api", "appointments", "by-status"],
-          "query": [{ "key": "status", "value": "WRONG" }]
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "appointments",
+            "by-status"
+          ],
+          "query": [
+            {
+              "key": "status",
+              "value": "WRONG"
+            }
+          ]
         }
-      }
+      },
+      "response": []
     },
     {
       "name": "A3 Appointments between dates",
       "request": {
         "method": "GET",
+        "header": [],
         "url": {
           "raw": "{{baseUrl}}/api/appointments/between?start=2026-10-01&end=2026-10-31",
-          "host": ["{{baseUrl}}"],
-          "path": ["api", "appointments", "between"],
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "appointments",
+            "between"
+          ],
           "query": [
-            { "key": "start", "value": "2026-10-01" },
-            { "key": "end", "value": "2026-10-31" }
+            {
+              "key": "start",
+              "value": "2026-10-01"
+            },
+            {
+              "key": "end",
+              "value": "2026-10-31"
+            }
           ]
         }
-      }
+      },
+      "response": []
     },
     {
       "name": "A3 Appointments between (bad date -> 400)",
       "request": {
         "method": "GET",
+        "header": [],
         "url": {
           "raw": "{{baseUrl}}/api/appointments/between?start=abc&end=2026-10-31",
-          "host": ["{{baseUrl}}"],
-          "path": ["api", "appointments", "between"],
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "appointments",
+            "between"
+          ],
           "query": [
-            { "key": "start", "value": "abc" },
-            { "key": "end", "value": "2026-10-31" }
+            {
+              "key": "start",
+              "value": "abc"
+            },
+            {
+              "key": "end",
+              "value": "2026-10-31"
+            }
           ]
         }
-      }
+      },
+      "response": []
     },
     {
       "name": "A4 Save appointment (doctor already booked that date -> 409)",
       "request": {
         "method": "POST",
-        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
         "body": {
           "mode": "raw",
-          "raw": "{\n  \"patient\": { \"id\": \"32394660-3043-45c0-90dd-a391674dbede\" },\n  \"doctor\": { \"id\": \"{{doctorId}}\" },\n  \"appointmentDate\": \"2026-10-20T15:00:00\",\n  \"reason\": \"Checkup\"\n}"
+          "raw": "{\n  \"patient\": { \"id\": \"32394660-3043-45c0-90dd-a391674dbede\" },\n  \"doctor\": { \"id\": \"{{doctorId}}\" },\n  \"appointmentDate\": \"2026-10-20T15:00:00\",\n  \"reason\": \"Checkup\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
         },
         "url": {
           "raw": "{{baseUrl}}/api/appointments/save",
-          "host": ["{{baseUrl}}"],
-          "path": ["api", "appointments", "save"]
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "appointments",
+            "save"
+          ]
         }
-      }
+      },
+      "response": []
     },
     {
       "name": "Setup - List doctors (to get an id)",
       "request": {
         "method": "GET",
+        "header": [],
         "url": {
           "raw": "{{baseUrl}}/api/doctor/all",
-          "host": ["{{baseUrl}}"],
-          "path": ["api", "doctor", "all"]
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "doctor",
+            "all"
+          ]
         }
-      }
+      },
+      "response": []
     },
     {
       "name": "B1 Doctors by specialization (cardiology)",
       "request": {
         "method": "GET",
+        "header": [],
         "url": {
           "raw": "{{baseUrl}}/api/doctors/by-specialization?name=cardiology",
-          "host": ["{{baseUrl}}"],
-          "path": ["api", "doctors", "by-specialization"],
-          "query": [{ "key": "name", "value": "cardiology" }]
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "doctors",
+            "by-specialization"
+          ],
+          "query": [
+            {
+              "key": "name",
+              "value": "cardiology"
+            }
+          ]
         }
-      }
+      },
+      "response": []
     },
     {
       "name": "B1 Doctors by specialization (CARDIOLOGY - case test)",
       "request": {
         "method": "GET",
+        "header": [],
         "url": {
           "raw": "{{baseUrl}}/api/doctors/by-specialization?name=CARDIOLOGY",
-          "host": ["{{baseUrl}}"],
-          "path": ["api", "doctors", "by-specialization"],
-          "query": [{ "key": "name", "value": "CARDIOLOGY" }]
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "doctors",
+            "by-specialization"
+          ],
+          "query": [
+            {
+              "key": "name",
+              "value": "CARDIOLOGY"
+            }
+          ]
         }
-      }
+      },
+      "response": []
     },
     {
       "name": "B2 Doctors without an office",
       "request": {
         "method": "GET",
+        "header": [],
         "url": {
           "raw": "{{baseUrl}}/api/doctors/without-office",
-          "host": ["{{baseUrl}}"],
-          "path": ["api", "doctors", "without-office"]
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "doctors",
+            "without-office"
+          ]
         }
-      }
+      },
+      "response": []
     },
     {
       "name": "B3 Specializations nobody offers",
       "request": {
         "method": "GET",
+        "header": [],
         "url": {
           "raw": "{{baseUrl}}/api/specializations/unused",
-          "host": ["{{baseUrl}}"],
-          "path": ["api", "specializations", "unused"]
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "specializations",
+            "unused"
+          ]
         }
-      }
+      },
+      "response": []
     },
     {
       "name": "B4 Patients of a doctor",
       "request": {
         "method": "GET",
+        "header": [],
         "url": {
           "raw": "{{baseUrl}}/api/patients/of-doctor/{{doctorId}}",
-          "host": ["{{baseUrl}}"],
-          "path": ["api", "patients", "of-doctor", "{{doctorId}}"]
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "patients",
+            "of-doctor",
+            "{{doctorId}}"
+          ]
         }
-      }
+      },
+      "response": []
     },
     {
       "name": "B4 Patients of a doctor (unknown id -> 404)",
       "request": {
         "method": "GET",
+        "header": [],
         "url": {
           "raw": "{{baseUrl}}/api/patients/of-doctor/00000000-0000-0000-0000-000000000000",
-          "host": ["{{baseUrl}}"],
-          "path": ["api", "patients", "of-doctor", "00000000-0000-0000-0000-000000000000"]
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "patients",
+            "of-doctor",
+            "00000000-0000-0000-0000-000000000000"
+          ]
         }
-      }
+      },
+      "response": []
     },
     {
       "name": "Setup - Give an office a name (for C3)",
       "request": {
         "method": "PUT",
-        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
         "body": {
           "mode": "raw",
-          "raw": "{\n  \"name\": \"Cardiology Wing\",\n  \"officeNumber\": \"101\"\n}"
+          "raw": "{\n  \"name\": \"Cardiology Wing\",\n  \"officeNumber\": \"101\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
         },
         "url": {
           "raw": "{{baseUrl}}/api/offices/update/{{officeId}}",
-          "host": ["{{baseUrl}}"],
-          "path": ["api", "offices", "update", "{{officeId}}"]
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "offices",
+            "update",
+            "{{officeId}}"
+          ]
         }
-      }
+      },
+      "response": []
     },
     {
       "name": "C1 Appointments per status",
       "request": {
         "method": "GET",
+        "header": [],
         "url": {
           "raw": "{{baseUrl}}/api/appointments/stats/by-status",
-          "host": ["{{baseUrl}}"],
-          "path": ["api", "appointments", "stats", "by-status"]
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "appointments",
+            "stats",
+            "by-status"
+          ]
         }
-      }
+      },
+      "response": []
     },
     {
       "name": "C2 Frequent patients (min=3)",
       "request": {
         "method": "GET",
+        "header": [],
         "url": {
           "raw": "{{baseUrl}}/api/patients/frequent?min=3",
-          "host": ["{{baseUrl}}"],
-          "path": ["api", "patients", "frequent"],
-          "query": [{ "key": "min", "value": "3" }]
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "patients",
+            "frequent"
+          ],
+          "query": [
+            {
+              "key": "min",
+              "value": "3"
+            }
+          ]
         }
-      }
+      },
+      "response": []
     },
     {
       "name": "C3 Busiest office",
       "request": {
         "method": "GET",
+        "header": [],
         "url": {
           "raw": "{{baseUrl}}/api/offices/busiest",
-          "host": ["{{baseUrl}}"],
-          "path": ["api", "offices", "busiest"]
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "offices",
+            "busiest"
+          ]
         }
-      }
+      },
+      "response": []
     },
     {
       "name": "C4 Doctor is absent (cancel a day)",
       "request": {
         "method": "PATCH",
+        "header": [],
         "url": {
           "raw": "{{baseUrl}}/api/appointments/cancel-day?doctorId={{doctorId}}&date=2026-10-20",
-          "host": ["{{baseUrl}}"],
-          "path": ["api", "appointments", "cancel-day"],
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "appointments",
+            "cancel-day"
+          ],
           "query": [
-            { "key": "doctorId", "value": "{{doctorId}}" },
-            { "key": "date", "value": "2026-10-20" }
+            {
+              "key": "doctorId",
+              "value": "{{doctorId}}"
+            },
+            {
+              "key": "date",
+              "value": "2026-10-20"
+            }
           ]
         }
-      }
+      },
+      "response": []
     },
     {
       "name": "Bonus Appointments page by page",
       "request": {
         "method": "GET",
+        "header": [],
         "url": {
           "raw": "{{baseUrl}}/api/appointments/page?page=0&size=5&sort=appointmentDate,desc",
-          "host": ["{{baseUrl}}"],
-          "path": ["api", "appointments", "page"],
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "appointments",
+            "page"
+          ],
           "query": [
-            { "key": "page", "value": "0" },
-            { "key": "size", "value": "5" },
-            { "key": "sort", "value": "appointmentDate,desc" }
+            {
+              "key": "page",
+              "value": "0"
+            },
+            {
+              "key": "size",
+              "value": "5"
+            },
+            {
+              "key": "sort",
+              "value": "appointmentDate,desc"
+            }
           ]
         }
-      }
+      },
+      "response": []
     },
     {
       "name": "Bonus Clean old cancellations",
       "request": {
         "method": "DELETE",
+        "header": [],
         "url": {
           "raw": "{{baseUrl}}/api/appointments/cancelled-before?date=2026-10-15",
-          "host": ["{{baseUrl}}"],
-          "path": ["api", "appointments", "cancelled-before"],
-          "query": [{ "key": "date", "value": "2026-10-15" }]
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "appointments",
+            "cancelled-before"
+          ],
+          "query": [
+            {
+              "key": "date",
+              "value": "2026-10-15"
+            }
+          ]
         }
-      }
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:1014",
+      "type": "string"
+    },
+    {
+      "key": "doctorId",
+      "value": "4c376bb6-0c7e-4554-8a0b-0317e8f31829",
+      "type": "string"
+    },
+    {
+      "key": "officeId",
+      "value": "41c01f78-0bfd-4019-96a9-155d7f50f6e3",
+      "type": "string"
     }
   ]
 }

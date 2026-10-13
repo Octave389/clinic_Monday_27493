@@ -1,25 +1,9 @@
 {
   "info": {
+    "_postman_id": "2f8d6560-7e1c-451b-ab70-fd31ca0b0468",
     "name": "Clinic Management - Quiz 2",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
-  "variable": [
-    { "key": "baseUrl", "value": "http://localhost:1014" },
-    { "key": "aliceId", "value": "4c376bb6-0c7e-4554-8a0b-0317e8f31829" },
-    { "key": "ericId", "value": "b101778f-9372-45c3-a827-903bc0a657a4" },
-    { "key": "claireId", "value": "77b345b0-f876-4612-866e-681413c193f4" },
-    { "key": "pediatricsId", "value": "9b3e266a-cf80-4d11-84b1-c229793f301b" },
-    { "key": "dianeId", "value": "32394660-3043-45c0-90dd-a391674dbede" },
-    { "key": "ssNumber", "value": "1001" },
-    { "key": "olivierId", "value": "1b0c0854-cdad-43fe-99a9-b9025573d0c7" },
-    { "key": "dianeAliceApptId", "value": "6ed1b0d5-8a04-4f34-8e18-be67ca449fc2" },
-    { "key": "dianeEricApptId", "value": "3ae55b1a-dd7f-453e-aace-10bd7796eb77" },
-    { "key": "dianeClaireApptId", "value": "b8072577-85cd-4e5b-ae9a-c1d837e958e3" },
-    { "key": "olivierClaireApptId", "value": "e3781cc6-121a-442b-9dff-bdb862e32a4c" },
-    { "key": "completedApptId", "value": "dea258ba-6db9-432f-a38b-168d80caf377" },
-    { "key": "prescriptionId", "value": "b349ddd7-be84-41a9-a7c7-c9e2590f1fe8" },
-    { "key": "unknownId", "value": "00000000-0000-0000-0000-000000000000" }
-  ],
   "item": [
     {
       "name": "Step 0 - Data",
@@ -28,49 +12,106 @@
           "name": "Create office 104 (stays free)",
           "request": {
             "method": "POST",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
-            "body": { "mode": "raw", "raw": "{\n  \"officeNumber\": \"104\"\n}" },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"officeNumber\": \"104\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
             "url": {
               "raw": "{{baseUrl}}/api/offices/save",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "offices", "save"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "offices",
+                "save"
+              ]
             }
-          }
+          },
+          "response": []
         },
         {
           "name": "Give Diane her ss number (1001)",
           "request": {
             "method": "PUT",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
-            "body": { "mode": "raw", "raw": "{\n  \"firstName\": \"Diane\",\n  \"lastName\": \"Uwase\",\n  \"ssNumber\": \"{{ssNumber}}\"\n}" },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"firstName\": \"Diane\",\n  \"lastName\": \"Uwase\",\n  \"ssNumber\": \"{{ssNumber}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
             "url": {
               "raw": "{{baseUrl}}/api/patients/update/{{dianeId}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "patients", "update", "{{dianeId}}"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "patients",
+                "update",
+                "{{dianeId}}"
+              ]
             }
-          }
+          },
+          "response": []
         },
         {
           "name": "List patients (ss numbers)",
           "request": {
             "method": "GET",
+            "header": [],
             "url": {
               "raw": "{{baseUrl}}/api/patients/all",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "patients", "all"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "patients",
+                "all"
+              ]
             }
-          }
+          },
+          "response": []
         },
         {
           "name": "List doctors (ids, offices, specializations)",
           "request": {
             "method": "GET",
+            "header": [],
             "url": {
               "raw": "{{baseUrl}}/api/doctors/all",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "doctors", "all"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "doctors",
+                "all"
+              ]
             }
-          }
+          },
+          "response": []
         }
       ]
     },
@@ -81,115 +122,229 @@
           "name": "A1 Add Pediatrics to Eric (200)",
           "request": {
             "method": "PUT",
+            "header": [],
             "url": {
               "raw": "{{baseUrl}}/api/doctors/{{ericId}}/specializations/{{pediatricsId}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "doctors", "{{ericId}}", "specializations", "{{pediatricsId}}"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "doctors",
+                "{{ericId}}",
+                "specializations",
+                "{{pediatricsId}}"
+              ]
             }
-          }
+          },
+          "response": []
         },
         {
           "name": "A1 Add it again (409)",
           "request": {
             "method": "PUT",
+            "header": [],
             "url": {
               "raw": "{{baseUrl}}/api/doctors/{{ericId}}/specializations/{{pediatricsId}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "doctors", "{{ericId}}", "specializations", "{{pediatricsId}}"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "doctors",
+                "{{ericId}}",
+                "specializations",
+                "{{pediatricsId}}"
+              ]
             }
-          }
+          },
+          "response": []
         },
         {
           "name": "A1 Unknown doctor (404)",
           "request": {
             "method": "PUT",
+            "header": [],
             "url": {
               "raw": "{{baseUrl}}/api/doctors/{{unknownId}}/specializations/{{pediatricsId}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "doctors", "{{unknownId}}", "specializations", "{{pediatricsId}}"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "doctors",
+                "{{unknownId}}",
+                "specializations",
+                "{{pediatricsId}}"
+              ]
             }
-          }
+          },
+          "response": []
         },
         {
           "name": "A2 Remove Pediatrics from Eric (200)",
           "request": {
             "method": "DELETE",
+            "header": [],
             "url": {
               "raw": "{{baseUrl}}/api/doctors/{{ericId}}/specializations/{{pediatricsId}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "doctors", "{{ericId}}", "specializations", "{{pediatricsId}}"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "doctors",
+                "{{ericId}}",
+                "specializations",
+                "{{pediatricsId}}"
+              ]
             }
-          }
+          },
+          "response": []
         },
         {
           "name": "A2 Remove it again (409)",
           "request": {
             "method": "DELETE",
+            "header": [],
             "url": {
               "raw": "{{baseUrl}}/api/doctors/{{ericId}}/specializations/{{pediatricsId}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "doctors", "{{ericId}}", "specializations", "{{pediatricsId}}"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "doctors",
+                "{{ericId}}",
+                "specializations",
+                "{{pediatricsId}}"
+              ]
             }
-          }
+          },
+          "response": []
         },
         {
           "name": "A3 Free offices",
           "request": {
             "method": "GET",
+            "header": [],
             "url": {
               "raw": "{{baseUrl}}/api/offices/free",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "offices", "free"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "offices",
+                "free"
+              ]
             }
-          }
+          },
+          "response": []
         },
         {
           "name": "A4 Move Claire to 104 (200)",
           "request": {
             "method": "PATCH",
+            "header": [],
             "url": {
               "raw": "{{baseUrl}}/api/doctors/{{claireId}}/office?officeNumber=104",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "doctors", "{{claireId}}", "office"],
-              "query": [{ "key": "officeNumber", "value": "104" }]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "doctors",
+                "{{claireId}}",
+                "office"
+              ],
+              "query": [
+                {
+                  "key": "officeNumber",
+                  "value": "104"
+                }
+              ]
             }
-          }
+          },
+          "response": []
         },
         {
           "name": "A4 Move Claire back to 103 (200)",
           "request": {
             "method": "PATCH",
+            "header": [],
             "url": {
               "raw": "{{baseUrl}}/api/doctors/{{claireId}}/office?officeNumber=103",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "doctors", "{{claireId}}", "office"],
-              "query": [{ "key": "officeNumber", "value": "103" }]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "doctors",
+                "{{claireId}}",
+                "office"
+              ],
+              "query": [
+                {
+                  "key": "officeNumber",
+                  "value": "103"
+                }
+              ]
             }
-          }
+          },
+          "response": []
         },
         {
           "name": "A4 Office taken by Eric (409)",
           "request": {
             "method": "PATCH",
+            "header": [],
             "url": {
               "raw": "{{baseUrl}}/api/doctors/{{aliceId}}/office?officeNumber=102",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "doctors", "{{aliceId}}", "office"],
-              "query": [{ "key": "officeNumber", "value": "102" }]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "doctors",
+                "{{aliceId}}",
+                "office"
+              ],
+              "query": [
+                {
+                  "key": "officeNumber",
+                  "value": "102"
+                }
+              ]
             }
-          }
+          },
+          "response": []
         },
         {
           "name": "A4 Unknown office number (404)",
           "request": {
             "method": "PATCH",
+            "header": [],
             "url": {
               "raw": "{{baseUrl}}/api/doctors/{{aliceId}}/office?officeNumber=999",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "doctors", "{{aliceId}}", "office"],
-              "query": [{ "key": "officeNumber", "value": "999" }]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "doctors",
+                "{{aliceId}}",
+                "office"
+              ],
+              "query": [
+                {
+                  "key": "officeNumber",
+                  "value": "999"
+                }
+              ]
             }
-          }
+          },
+          "response": []
         }
       ]
     },
@@ -200,147 +355,327 @@
           "name": "B1 Date in the past (400)",
           "request": {
             "method": "POST",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
-            "body": { "mode": "raw", "raw": "{\n  \"patient\": { \"id\": \"{{dianeId}}\" },\n  \"doctor\": { \"id\": \"{{ericId}}\" },\n  \"appointmentDate\": \"2026-10-01T10:00:00\"\n}" },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"patient\": { \"id\": \"{{dianeId}}\" },\n  \"doctor\": { \"id\": \"{{ericId}}\" },\n  \"appointmentDate\": \"2026-10-01T10:00:00\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
             "url": {
               "raw": "{{baseUrl}}/api/appointments/save",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "appointments", "save"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "appointments",
+                "save"
+              ]
             }
-          }
+          },
+          "response": []
         },
         {
           "name": "B1 Body status is ignored, saved as SCHEDULED (201)",
           "request": {
             "method": "POST",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
-            "body": { "mode": "raw", "raw": "{\n  \"patient\": { \"id\": \"{{olivierId}}\" },\n  \"doctor\": { \"id\": \"{{ericId}}\" },\n  \"appointmentDate\": \"2026-10-28T09:00:00\",\n  \"status\": \"COMPLETED\",\n  \"reason\": \"Skin check\"\n}" },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"patient\": { \"id\": \"{{olivierId}}\" },\n  \"doctor\": { \"id\": \"{{ericId}}\" },\n  \"appointmentDate\": \"2026-10-28T09:00:00\",\n  \"status\": \"COMPLETED\",\n  \"reason\": \"Skin check\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
             "url": {
               "raw": "{{baseUrl}}/api/appointments/save",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "appointments", "save"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "appointments",
+                "save"
+              ]
             }
-          }
+          },
+          "response": []
         },
         {
           "name": "B2 SCHEDULED -> CONFIRMED (200)",
           "request": {
             "method": "PATCH",
+            "header": [],
             "url": {
               "raw": "{{baseUrl}}/api/appointments/{{olivierClaireApptId}}/status?status=CONFIRMED",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "appointments", "{{olivierClaireApptId}}", "status"],
-              "query": [{ "key": "status", "value": "CONFIRMED" }]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "appointments",
+                "{{olivierClaireApptId}}",
+                "status"
+              ],
+              "query": [
+                {
+                  "key": "status",
+                  "value": "CONFIRMED"
+                }
+              ]
             }
-          }
+          },
+          "response": []
         },
         {
           "name": "B2 CONFIRMED -> SCHEDULED (400)",
           "request": {
             "method": "PATCH",
+            "header": [],
             "url": {
               "raw": "{{baseUrl}}/api/appointments/{{olivierClaireApptId}}/status?status=SCHEDULED",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "appointments", "{{olivierClaireApptId}}", "status"],
-              "query": [{ "key": "status", "value": "SCHEDULED" }]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "appointments",
+                "{{olivierClaireApptId}}",
+                "status"
+              ],
+              "query": [
+                {
+                  "key": "status",
+                  "value": "SCHEDULED"
+                }
+              ]
             }
-          }
+          },
+          "response": []
         },
         {
           "name": "B2 COMPLETED -> SCHEDULED (400)",
           "request": {
             "method": "PATCH",
+            "header": [],
             "url": {
               "raw": "{{baseUrl}}/api/appointments/{{completedApptId}}/status?status=SCHEDULED",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "appointments", "{{completedApptId}}", "status"],
-              "query": [{ "key": "status", "value": "SCHEDULED" }]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "appointments",
+                "{{completedApptId}}",
+                "status"
+              ],
+              "query": [
+                {
+                  "key": "status",
+                  "value": "SCHEDULED"
+                }
+              ]
             }
-          }
+          },
+          "response": []
         },
         {
           "name": "B2 Unknown appointment (404)",
           "request": {
             "method": "PATCH",
+            "header": [],
             "url": {
               "raw": "{{baseUrl}}/api/appointments/{{unknownId}}/status?status=CONFIRMED",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "appointments", "{{unknownId}}", "status"],
-              "query": [{ "key": "status", "value": "CONFIRMED" }]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "appointments",
+                "{{unknownId}}",
+                "status"
+              ],
+              "query": [
+                {
+                  "key": "status",
+                  "value": "CONFIRMED"
+                }
+              ]
             }
-          }
+          },
+          "response": []
         },
         {
           "name": "B3 Reschedule Diane's 10-22 to 10-30 (200)",
           "request": {
             "method": "PATCH",
+            "header": [],
             "url": {
               "raw": "{{baseUrl}}/api/appointments/{{dianeEricApptId}}/reschedule?newDate=2026-10-30",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "appointments", "{{dianeEricApptId}}", "reschedule"],
-              "query": [{ "key": "newDate", "value": "2026-10-30" }]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "appointments",
+                "{{dianeEricApptId}}",
+                "reschedule"
+              ],
+              "query": [
+                {
+                  "key": "newDate",
+                  "value": "2026-10-30"
+                }
+              ]
             }
-          }
+          },
+          "response": []
         },
         {
           "name": "B3 Doctor already booked that date (409)",
           "request": {
             "method": "PATCH",
+            "header": [],
             "url": {
               "raw": "{{baseUrl}}/api/appointments/{{dianeClaireApptId}}/reschedule?newDate=2026-11-05",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "appointments", "{{dianeClaireApptId}}", "reschedule"],
-              "query": [{ "key": "newDate", "value": "2026-11-05" }]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "appointments",
+                "{{dianeClaireApptId}}",
+                "reschedule"
+              ],
+              "query": [
+                {
+                  "key": "newDate",
+                  "value": "2026-11-05"
+                }
+              ]
             }
-          }
+          },
+          "response": []
         },
         {
           "name": "B3 COMPLETED cannot be rescheduled (400)",
           "request": {
             "method": "PATCH",
+            "header": [],
             "url": {
               "raw": "{{baseUrl}}/api/appointments/{{completedApptId}}/reschedule?newDate=2026-10-30",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "appointments", "{{completedApptId}}", "reschedule"],
-              "query": [{ "key": "newDate", "value": "2026-10-30" }]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "appointments",
+                "{{completedApptId}}",
+                "reschedule"
+              ],
+              "query": [
+                {
+                  "key": "newDate",
+                  "value": "2026-10-30"
+                }
+              ]
             }
-          }
+          },
+          "response": []
         },
         {
           "name": "B3 New date in the past (400)",
           "request": {
             "method": "PATCH",
+            "header": [],
             "url": {
               "raw": "{{baseUrl}}/api/appointments/{{dianeAliceApptId}}/reschedule?newDate=2026-10-01",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "appointments", "{{dianeAliceApptId}}", "reschedule"],
-              "query": [{ "key": "newDate", "value": "2026-10-01" }]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "appointments",
+                "{{dianeAliceApptId}}",
+                "reschedule"
+              ],
+              "query": [
+                {
+                  "key": "newDate",
+                  "value": "2026-10-01"
+                }
+              ]
             }
-          }
+          },
+          "response": []
         },
         {
           "name": "B3 Unknown appointment (404)",
           "request": {
             "method": "PATCH",
+            "header": [],
             "url": {
               "raw": "{{baseUrl}}/api/appointments/{{unknownId}}/reschedule?newDate=2026-10-30",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "appointments", "{{unknownId}}", "reschedule"],
-              "query": [{ "key": "newDate", "value": "2026-10-30" }]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "appointments",
+                "{{unknownId}}",
+                "reschedule"
+              ],
+              "query": [
+                {
+                  "key": "newDate",
+                  "value": "2026-10-30"
+                }
+              ]
             }
-          }
+          },
+          "response": []
         },
         {
           "name": "B3 Move Diane's appointment back to 10-22 (200)",
           "request": {
             "method": "PATCH",
+            "header": [],
             "url": {
               "raw": "{{baseUrl}}/api/appointments/{{dianeEricApptId}}/reschedule?newDate=2026-10-22",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "appointments", "{{dianeEricApptId}}", "reschedule"],
-              "query": [{ "key": "newDate", "value": "2026-10-22" }]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "appointments",
+                "{{dianeEricApptId}}",
+                "reschedule"
+              ],
+              "query": [
+                {
+                  "key": "newDate",
+                  "value": "2026-10-22"
+                }
+              ]
             }
-          }
+          },
+          "response": []
         }
       ]
     },
@@ -351,43 +686,118 @@
           "name": "C1 Write a prescription for Jean's COMPLETED appointment (201)",
           "request": {
             "method": "POST",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
-            "body": { "mode": "raw", "raw": "{\n  \"medicineName\": \"Amoxicillin\",\n  \"dosage\": \"1 tablet, 3 times a day\",\n  \"durationDays\": 7\n}" },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"medicineName\": \"Amoxicillin\",\n  \"dosage\": \"1 tablet, 3 times a day\",\n  \"durationDays\": 7\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
             "url": {
               "raw": "{{baseUrl}}/api/prescriptions/save?appointmentId={{completedApptId}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "prescriptions", "save"],
-              "query": [{ "key": "appointmentId", "value": "{{completedApptId}}" }]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "prescriptions",
+                "save"
+              ],
+              "query": [
+                {
+                  "key": "appointmentId",
+                  "value": "{{completedApptId}}"
+                }
+              ]
             }
-          }
+          },
+          "response": []
         },
         {
           "name": "C1 Appointment is not COMPLETED (400)",
           "request": {
             "method": "POST",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
-            "body": { "mode": "raw", "raw": "{\n  \"medicineName\": \"Amoxicillin\",\n  \"dosage\": \"1 tablet, 3 times a day\",\n  \"durationDays\": 7\n}" },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"medicineName\": \"Amoxicillin\",\n  \"dosage\": \"1 tablet, 3 times a day\",\n  \"durationDays\": 7\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
             "url": {
               "raw": "{{baseUrl}}/api/prescriptions/save?appointmentId={{dianeAliceApptId}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "prescriptions", "save"],
-              "query": [{ "key": "appointmentId", "value": "{{dianeAliceApptId}}" }]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "prescriptions",
+                "save"
+              ],
+              "query": [
+                {
+                  "key": "appointmentId",
+                  "value": "{{dianeAliceApptId}}"
+                }
+              ]
             }
-          }
+          },
+          "response": []
         },
         {
           "name": "C1 Unknown appointment (404)",
           "request": {
             "method": "POST",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
-            "body": { "mode": "raw", "raw": "{\n  \"medicineName\": \"Amoxicillin\",\n  \"dosage\": \"1 tablet, 3 times a day\",\n  \"durationDays\": 7\n}" },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"medicineName\": \"Amoxicillin\",\n  \"dosage\": \"1 tablet, 3 times a day\",\n  \"durationDays\": 7\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
             "url": {
               "raw": "{{baseUrl}}/api/prescriptions/save?appointmentId={{unknownId}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "prescriptions", "save"],
-              "query": [{ "key": "appointmentId", "value": "{{unknownId}}" }]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "prescriptions",
+                "save"
+              ],
+              "query": [
+                {
+                  "key": "appointmentId",
+                  "value": "{{unknownId}}"
+                }
+              ]
             }
-          }
+          },
+          "response": []
         },
         {
           "name": "C2 Prescriptions of Jean's appointment (saves newest id)",
@@ -409,115 +819,229 @@
           ],
           "request": {
             "method": "GET",
+            "header": [],
             "url": {
               "raw": "{{baseUrl}}/api/prescriptions/appointment/{{completedApptId}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "prescriptions", "appointment", "{{completedApptId}}"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "prescriptions",
+                "appointment",
+                "{{completedApptId}}"
+              ]
             }
-          }
+          },
+          "response": []
         },
         {
           "name": "C2 Appointment without prescriptions -> []",
           "request": {
             "method": "GET",
+            "header": [],
             "url": {
               "raw": "{{baseUrl}}/api/prescriptions/appointment/{{dianeAliceApptId}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "prescriptions", "appointment", "{{dianeAliceApptId}}"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "prescriptions",
+                "appointment",
+                "{{dianeAliceApptId}}"
+              ]
             }
-          }
+          },
+          "response": []
         },
         {
           "name": "C2 Unknown appointment (404)",
           "request": {
             "method": "GET",
+            "header": [],
             "url": {
               "raw": "{{baseUrl}}/api/prescriptions/appointment/{{unknownId}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "prescriptions", "appointment", "{{unknownId}}"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "prescriptions",
+                "appointment",
+                "{{unknownId}}"
+              ]
             }
-          }
+          },
+          "response": []
         },
         {
           "name": "C3 Prescription history of Diane (ssNumber)",
           "request": {
             "method": "GET",
+            "header": [],
             "url": {
               "raw": "{{baseUrl}}/api/prescriptions/patient/{{ssNumber}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "prescriptions", "patient", "{{ssNumber}}"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "prescriptions",
+                "patient",
+                "{{ssNumber}}"
+              ]
             }
-          }
+          },
+          "response": []
         },
         {
           "name": "C3 Patient without prescriptions -> [] (1004)",
           "request": {
             "method": "GET",
+            "header": [],
             "url": {
               "raw": "{{baseUrl}}/api/prescriptions/patient/1004",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "prescriptions", "patient", "1004"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "prescriptions",
+                "patient",
+                "1004"
+              ]
             }
-          }
+          },
+          "response": []
         },
         {
           "name": "C4 Update the new prescription (200)",
           "request": {
             "method": "PUT",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
-            "body": { "mode": "raw", "raw": "{\n  \"medicineName\": \"Amoxicillin\",\n  \"dosage\": \"2 tablets, twice a day\",\n  \"durationDays\": 5\n}" },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"medicineName\": \"Amoxicillin\",\n  \"dosage\": \"2 tablets, twice a day\",\n  \"durationDays\": 5\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
             "url": {
               "raw": "{{baseUrl}}/api/prescriptions/update/{{prescriptionId}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "prescriptions", "update", "{{prescriptionId}}"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "prescriptions",
+                "update",
+                "{{prescriptionId}}"
+              ]
             }
-          }
+          },
+          "response": []
         },
         {
           "name": "C4 Update unknown prescription (404)",
           "request": {
             "method": "PUT",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
-            "body": { "mode": "raw", "raw": "{\n  \"medicineName\": \"Amoxicillin\",\n  \"dosage\": \"2 tablets, twice a day\",\n  \"durationDays\": 5\n}" },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"medicineName\": \"Amoxicillin\",\n  \"dosage\": \"2 tablets, twice a day\",\n  \"durationDays\": 5\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
             "url": {
               "raw": "{{baseUrl}}/api/prescriptions/update/{{unknownId}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "prescriptions", "update", "{{unknownId}}"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "prescriptions",
+                "update",
+                "{{unknownId}}"
+              ]
             }
-          }
+          },
+          "response": []
         },
         {
           "name": "C4 Delete Jean's appointment, it has prescriptions (409)",
           "request": {
             "method": "DELETE",
+            "header": [],
             "url": {
               "raw": "{{baseUrl}}/api/appointments/delete/{{completedApptId}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "appointments", "delete", "{{completedApptId}}"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "appointments",
+                "delete",
+                "{{completedApptId}}"
+              ]
             }
-          }
+          },
+          "response": []
         },
         {
           "name": "C4 Delete the new prescription (200)",
           "request": {
             "method": "DELETE",
+            "header": [],
             "url": {
               "raw": "{{baseUrl}}/api/prescriptions/delete/{{prescriptionId}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "prescriptions", "delete", "{{prescriptionId}}"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "prescriptions",
+                "delete",
+                "{{prescriptionId}}"
+              ]
             }
-          }
+          },
+          "response": []
         },
         {
           "name": "C4 Delete it again (404)",
           "request": {
             "method": "DELETE",
+            "header": [],
             "url": {
               "raw": "{{baseUrl}}/api/prescriptions/delete/{{prescriptionId}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "prescriptions", "delete", "{{prescriptionId}}"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "prescriptions",
+                "delete",
+                "{{prescriptionId}}"
+              ]
             }
-          }
+          },
+          "response": []
         }
       ]
     },
@@ -528,82 +1052,162 @@
           "name": "D1 Alice's agenda on 2026-10-20, CANCELLED hidden",
           "request": {
             "method": "GET",
+            "header": [],
             "url": {
               "raw": "{{baseUrl}}/api/doctors/{{aliceId}}/agenda?date=2026-10-20",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "doctors", "{{aliceId}}", "agenda"],
-              "query": [{ "key": "date", "value": "2026-10-20" }]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "doctors",
+                "{{aliceId}}",
+                "agenda"
+              ],
+              "query": [
+                {
+                  "key": "date",
+                  "value": "2026-10-20"
+                }
+              ]
             }
-          }
+          },
+          "response": []
         },
         {
           "name": "D1 Unknown doctor (404)",
           "request": {
             "method": "GET",
+            "header": [],
             "url": {
               "raw": "{{baseUrl}}/api/doctors/{{unknownId}}/agenda?date=2026-10-20",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "doctors", "{{unknownId}}", "agenda"],
-              "query": [{ "key": "date", "value": "2026-10-20" }]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "doctors",
+                "{{unknownId}}",
+                "agenda"
+              ],
+              "query": [
+                {
+                  "key": "date",
+                  "value": "2026-10-20"
+                }
+              ]
             }
-          }
+          },
+          "response": []
         },
         {
           "name": "D2 Diane's upcoming appointments (ssNumber)",
           "request": {
             "method": "GET",
+            "header": [],
             "url": {
               "raw": "{{baseUrl}}/api/patients/{{ssNumber}}/upcoming",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "patients", "{{ssNumber}}", "upcoming"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "patients",
+                "{{ssNumber}}",
+                "upcoming"
+              ]
             }
-          }
+          },
+          "response": []
         },
         {
           "name": "D2 Unknown ss number (404)",
           "request": {
             "method": "GET",
+            "header": [],
             "url": {
               "raw": "{{baseUrl}}/api/patients/9999/upcoming",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "patients", "9999", "upcoming"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "patients",
+                "9999",
+                "upcoming"
+              ]
             }
-          }
+          },
+          "response": []
         },
         {
           "name": "D3 Search doctors by name (mana)",
           "request": {
             "method": "GET",
+            "header": [],
             "url": {
               "raw": "{{baseUrl}}/api/doctors/search?name=mana",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "doctors", "search"],
-              "query": [{ "key": "name", "value": "mana" }]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "doctors",
+                "search"
+              ],
+              "query": [
+                {
+                  "key": "name",
+                  "value": "mana"
+                }
+              ]
             }
-          }
+          },
+          "response": []
         },
         {
           "name": "D3 No match -> [] (gis)",
           "request": {
             "method": "GET",
+            "header": [],
             "url": {
               "raw": "{{baseUrl}}/api/doctors/search?name=gis",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "doctors", "search"],
-              "query": [{ "key": "name", "value": "gis" }]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "doctors",
+                "search"
+              ],
+              "query": [
+                {
+                  "key": "name",
+                  "value": "gis"
+                }
+              ]
             }
-          }
+          },
+          "response": []
         },
         {
           "name": "D4 Clinic dashboard",
           "request": {
             "method": "GET",
+            "header": [],
             "url": {
               "raw": "{{baseUrl}}/api/dashboard/summary",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "dashboard", "summary"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "dashboard",
+                "summary"
+              ]
             }
-          }
+          },
+          "response": []
         }
       ]
     },
@@ -614,44 +1218,158 @@
           "name": "Bonus Most prescribed medicines",
           "request": {
             "method": "GET",
+            "header": [],
             "url": {
               "raw": "{{baseUrl}}/api/prescriptions/stats/top-medicines",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "prescriptions", "stats", "top-medicines"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "prescriptions",
+                "stats",
+                "top-medicines"
+              ]
             }
-          }
+          },
+          "response": []
         },
         {
           "name": "Bonus Doctor workload in October",
           "request": {
             "method": "GET",
+            "header": [],
             "url": {
               "raw": "{{baseUrl}}/api/doctors/workload?start=2026-10-01&end=2026-10-31",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "doctors", "workload"],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "doctors",
+                "workload"
+              ],
               "query": [
-                { "key": "start", "value": "2026-10-01" },
-                { "key": "end", "value": "2026-10-31" }
+                {
+                  "key": "start",
+                  "value": "2026-10-01"
+                },
+                {
+                  "key": "end",
+                  "value": "2026-10-31"
+                }
               ]
             }
-          }
+          },
+          "response": []
         },
         {
           "name": "Bonus Doctor workload in October and November",
           "request": {
             "method": "GET",
+            "header": [],
             "url": {
               "raw": "{{baseUrl}}/api/doctors/workload?start=2026-10-01&end=2026-11-30",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "doctors", "workload"],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "doctors",
+                "workload"
+              ],
               "query": [
-                { "key": "start", "value": "2026-10-01" },
-                { "key": "end", "value": "2026-11-30" }
+                {
+                  "key": "start",
+                  "value": "2026-10-01"
+                },
+                {
+                  "key": "end",
+                  "value": "2026-11-30"
+                }
               ]
             }
-          }
+          },
+          "response": []
         }
       ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:1014",
+      "type": "string"
+    },
+    {
+      "key": "aliceId",
+      "value": "4c376bb6-0c7e-4554-8a0b-0317e8f31829",
+      "type": "string"
+    },
+    {
+      "key": "ericId",
+      "value": "b101778f-9372-45c3-a827-903bc0a657a4",
+      "type": "string"
+    },
+    {
+      "key": "claireId",
+      "value": "77b345b0-f876-4612-866e-681413c193f4",
+      "type": "string"
+    },
+    {
+      "key": "pediatricsId",
+      "value": "9b3e266a-cf80-4d11-84b1-c229793f301b",
+      "type": "string"
+    },
+    {
+      "key": "dianeId",
+      "value": "32394660-3043-45c0-90dd-a391674dbede",
+      "type": "string"
+    },
+    {
+      "key": "ssNumber",
+      "value": "1001",
+      "type": "string"
+    },
+    {
+      "key": "olivierId",
+      "value": "1b0c0854-cdad-43fe-99a9-b9025573d0c7",
+      "type": "string"
+    },
+    {
+      "key": "dianeAliceApptId",
+      "value": "6ed1b0d5-8a04-4f34-8e18-be67ca449fc2",
+      "type": "string"
+    },
+    {
+      "key": "dianeEricApptId",
+      "value": "3ae55b1a-dd7f-453e-aace-10bd7796eb77",
+      "type": "string"
+    },
+    {
+      "key": "dianeClaireApptId",
+      "value": "b8072577-85cd-4e5b-ae9a-c1d837e958e3",
+      "type": "string"
+    },
+    {
+      "key": "olivierClaireApptId",
+      "value": "e3781cc6-121a-442b-9dff-bdb862e32a4c",
+      "type": "string"
+    },
+    {
+      "key": "completedApptId",
+      "value": "dea258ba-6db9-432f-a38b-168d80caf377",
+      "type": "string"
+    },
+    {
+      "key": "prescriptionId",
+      "value": "b349ddd7-be84-41a9-a7c7-c9e2590f1fe8",
+      "type": "string"
+    },
+    {
+      "key": "unknownId",
+      "value": "00000000-0000-0000-0000-000000000000",
+      "type": "string"
     }
   ]
 }
