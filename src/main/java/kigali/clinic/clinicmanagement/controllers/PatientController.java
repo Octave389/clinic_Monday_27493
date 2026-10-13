@@ -5,58 +5,55 @@ import kigali.clinic.clinicmanagement.services.PatientService;
 import kigali.clinic.clinicmanagement.utils.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
 @RestController
-@RequestMapping(value = {"/api/patient", "/api/patients"})
+@RequestMapping({"/api/patient", "/api/patients"})
 public class PatientController {
 
     @Autowired
     private PatientService patientService;
 
-    @PostMapping(value = "/save", consumes = MediaType.APPLICATION_JSON_VALUE,
-            produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping("/save")
     public ResponseEntity<?> savePatient(@RequestBody Patient patient) {
         return ApiResponses.fromMessage(patientService.savePatient(patient), HttpStatus.CREATED);
     }
 
-    @PutMapping(value = "/update/{id}", consumes = MediaType.APPLICATION_JSON_VALUE,
-            produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping("/update/{id}")
     public ResponseEntity<?> updatePatient(@PathVariable UUID id, @RequestBody Patient patient) {
         return ApiResponses.fromMessage(patientService.updatePatient(id, patient), HttpStatus.OK);
     }
 
-    @GetMapping(value = "/all", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping("/all")
     public ResponseEntity<?> getAllPatients() {
         return ResponseEntity.ok(patientService.getAllPatients());
     }
 
-    @GetMapping(value = "/by-last-name", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping("/by-last-name")
     public ResponseEntity<?> getPatientsByLastName(@RequestParam String lastName) {
         return ResponseEntity.ok(patientService.getPatientsByLastName(lastName));
     }
 
-    @GetMapping(value = "/frequent", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping("/frequent")
     public ResponseEntity<?> getFrequentPatients(@RequestParam long min) {
         return ResponseEntity.ok(patientService.getFrequentPatients(min));
     }
 
-    @GetMapping(value = "/of-doctor/{doctorId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping("/of-doctor/{doctorId}")
     public ResponseEntity<?> getPatientsOfDoctor(@PathVariable UUID doctorId) {
         return ApiResponses.fromData(patientService.getPatientsOfDoctor(doctorId).orElse(null),
                 "The doctor with that id does not exist");
     }
 
-    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping("/{id}")
     public ResponseEntity<?> getPatientById(@PathVariable UUID id) {
         return ApiResponses.fromData(patientService.getPatientById(id), "Patient not found");
     }
 
-    @DeleteMapping(value = "/delete/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> deletePatient(@PathVariable UUID id) {
         return ApiResponses.fromMessage(patientService.deletePatient(id), HttpStatus.OK);
     }

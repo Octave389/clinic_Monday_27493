@@ -20,12 +20,20 @@ import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.UUID;
 
+import static kigali.clinic.clinicmanagement.models.AppointmentStatus.CANCELLED;
+import static kigali.clinic.clinicmanagement.models.AppointmentStatus.COMPLETED;
+import static kigali.clinic.clinicmanagement.models.AppointmentStatus.CONFIRMED;
+import static kigali.clinic.clinicmanagement.models.AppointmentStatus.SCHEDULED;
 import static kigali.clinic.clinicmanagement.utils.Validations.normalize;
 
 @Service
 public class AppointmentService {
 
+    public static final String APPOINTMENT_NOT_FOUND = "The appointment with that id does not exist";
+
     private static final String DOCTOR_BOOKED = "Doctor is already booked on that date";
+
+    private static final String PAST_DATE = "Appointment date cannot be in the past";
 
     @Autowired
     private AppointmentRepository appointmentRepo;
@@ -55,19 +63,20 @@ public class AppointmentService {
             return "Appointment date is required";
         }
 
-        if (appointment.getAppointmentDate().isBefore(LocalDateTime.now())) {
-            return "Appointment date must be in the future";
+        LocalDate day = appointment.getAppointmentDate().toLocalDate();
+
+        // B1: today is still bookable, only earlier days are refused
+        if (day.isBefore(LocalDate.now())) {
+            return PAST_DATE;
         }
 
-        if (appointment.getStatus() == null) {
-            appointment.setStatus(AppointmentStatus.SCHEDULED);
-        }
-
-        if (isDoctorBooked(appointment, null)) {
+        if (isDoctorBooked(appointment.getDoctor().getId(), day, null)) {
             return DOCTOR_BOOKED;
         }
 
+        // B1: a new appointment always starts as SCHEDULED, whatever the body says
         appointment.setId(null);
+        appointment.setStatus(SCHEDULED);
         appointment.setReason(normalize(appointment.getReason()));
         appointmentRepo.save(appointment);
 
@@ -80,7 +89,7 @@ public class AppointmentService {
         Appointment existing = appointmentRepo.findById(id).orElse(null);
 
         if (existing == null) {
-            return "Appointment not found";
+            return APPOINTMENT_NOT_FOUND;
         }
 
         String error = resolvePatient(appointment);
@@ -99,29 +108,72 @@ public class AppointmentService {
             return "Appointment date is required";
         }
 
-        // a past date stays allowed here, so old appointments can still be closed
-        if (appointment.getStatus() == null) {
-            appointment.setStatus(existing.getStatus());
-        }
+        // a live appointment is re-checked only when it moves to another doctor or day
+        LocalDate day = appointment.getAppointmentDate().toLocalDate();
+        boolean moves = !existing.getDoctor().getId().equals(appointment.getDoctor().getId())
+                || !existing.getAppointmentDate().toLocalDate().equals(day);
 
-        // only an appointment that takes a new slot is checked, so a day that already
-        // holds two appointments can still have them confirmed or completed
-        boolean takesNewSlot = existing.getStatus() == AppointmentStatus.CANCELLED
-                || !existing.getDoctor().getId().equals(appointment.getDoctor().getId())
-                || !existing.getAppointmentDate().toLocalDate().equals(appointment.getAppointmentDate().toLocalDate());
-
-        if (takesNewSlot && isDoctorBooked(appointment, id)) {
+        if (existing.getStatus() != CANCELLED && moves && isDoctorBooked(appointment.getDoctor().getId(), day, id)) {
             return DOCTOR_BOOKED;
         }
 
+        // B2: the status is not copied; it only changes through PATCH /{id}/status
         existing.setPatient(appointment.getPatient());
         existing.setDoctor(appointment.getDoctor());
         existing.setAppointmentDate(appointment.getAppointmentDate());
-        existing.setStatus(appointment.getStatus());
         existing.setReason(normalize(appointment.getReason()));
         appointmentRepo.save(existing);
 
         return "Appointment is updated Successfully";
+    }
+
+    // B2
+    @Transactional
+    public String changeStatus(UUID id, AppointmentStatus status) {
+
+        Appointment appointment = appointmentRepo.findById(id).orElse(null);
+
+        if (appointment == null) {
+            return APPOINTMENT_NOT_FOUND;
+        }
+
+        if (!canMove(appointment.getStatus(), status)) {
+            return "Cannot change status from " + appointment.getStatus() + " to " + status;
+        }
+
+        appointment.setStatus(status);
+        appointmentRepo.save(appointment);
+
+        return "Appointment status updated successfully";
+    }
+
+    // B3: the date moves, the time of day stays, and the appointment starts over as SCHEDULED
+    @Transactional
+    public String reschedule(UUID id, LocalDate newDate) {
+
+        Appointment appointment = appointmentRepo.findById(id).orElse(null);
+
+        if (appointment == null) {
+            return APPOINTMENT_NOT_FOUND;
+        }
+
+        if (appointment.getStatus() == COMPLETED || appointment.getStatus() == CANCELLED) {
+            return "A " + appointment.getStatus() + " appointment cannot be rescheduled";
+        }
+
+        if (newDate.isBefore(LocalDate.now())) {
+            return PAST_DATE;
+        }
+
+        if (isDoctorBooked(appointment.getDoctor().getId(), newDate, id)) {
+            return DOCTOR_BOOKED;
+        }
+
+        appointment.setAppointmentDate(newDate.atTime(appointment.getAppointmentDate().toLocalTime()));
+        appointment.setStatus(SCHEDULED);
+        appointmentRepo.save(appointment);
+
+        return "Appointment rescheduled successfully";
     }
 
     public List<Appointment> getAllAppointments() {
@@ -171,7 +223,7 @@ public class AppointmentService {
         Appointment existing = appointmentRepo.findById(id).orElse(null);
 
         if (existing == null) {
-            return "Appointment not found";
+            return APPOINTMENT_NOT_FOUND;
         }
 
         appointmentRepo.delete(existing);
@@ -179,20 +231,26 @@ public class AppointmentService {
         return "Appointment is deleted Successfully";
     }
 
-    private boolean isDoctorBooked(Appointment appointment, UUID ignoredId) {
+    // B2 arrows: SCHEDULED -> CONFIRMED or CANCELLED, CONFIRMED -> COMPLETED or CANCELLED; the rest are final
+    private static boolean canMove(AppointmentStatus from, AppointmentStatus to) {
 
-        if (appointment.getStatus() == AppointmentStatus.CANCELLED) {
-            return false;
+        if (from == SCHEDULED) {
+            return to == CONFIRMED || to == CANCELLED;
         }
 
-        UUID doctorId = appointment.getDoctor().getId();
-        LocalDate day = appointment.getAppointmentDate().toLocalDate();
+        if (from == CONFIRMED) {
+            return to == COMPLETED || to == CANCELLED;
+        }
 
+        return false;
+    }
+
+    private boolean isDoctorBooked(UUID doctorId, LocalDate day, UUID ignoredId) {
         return ignoredId == null
                 ? appointmentRepo.existsByDoctorIdAndAppointmentDateBetweenAndStatusNot(
-                        doctorId, day.atStartOfDay(), endOfDay(day), AppointmentStatus.CANCELLED)
+                        doctorId, day.atStartOfDay(), endOfDay(day), CANCELLED)
                 : appointmentRepo.existsByDoctorIdAndAppointmentDateBetweenAndStatusNotAndIdNot(
-                        doctorId, day.atStartOfDay(), endOfDay(day), AppointmentStatus.CANCELLED, ignoredId);
+                        doctorId, day.atStartOfDay(), endOfDay(day), CANCELLED, ignoredId);
     }
 
     private static LocalDateTime endOfDay(LocalDate day) {

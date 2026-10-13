@@ -5,52 +5,49 @@ import kigali.clinic.clinicmanagement.services.OfficeService;
 import kigali.clinic.clinicmanagement.utils.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
 @RestController
-@RequestMapping(value = {"/api/office", "/api/offices"})
+@RequestMapping({"/api/office", "/api/offices"})
 public class OfficeController {
 
     @Autowired
     private OfficeService officeService;
 
-    @PostMapping(value = "/save", consumes = MediaType.APPLICATION_JSON_VALUE,
-            produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping("/save")
     public ResponseEntity<?> saveOffice(@RequestBody Office office) {
         return ApiResponses.fromMessage(officeService.saveOffice(office), HttpStatus.CREATED);
     }
 
-    @PutMapping(value = "/update/{id}", consumes = MediaType.APPLICATION_JSON_VALUE,
-            produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping("/update/{id}")
     public ResponseEntity<?> updateOffice(@PathVariable UUID id, @RequestBody Office office) {
         return ApiResponses.fromMessage(officeService.updateOffice(id, office), HttpStatus.OK);
     }
 
-    @GetMapping(value = "/all", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping("/all")
     public ResponseEntity<?> getAllOffices() {
         return ResponseEntity.ok(officeService.getAllOffices());
     }
 
-    @GetMapping(value = "/free", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping("/free")
     public ResponseEntity<?> getFreeOffices() {
         return ResponseEntity.ok(officeService.getFreeOffices());
     }
 
-    @GetMapping(value = "/busiest", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping("/busiest")
     public ResponseEntity<?> getBusiestOffice() {
         return ApiResponses.fromData(officeService.getBusiestOffice().orElse(null), "No appointments yet");
     }
 
-    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping("/{id}")
     public ResponseEntity<?> getOfficeById(@PathVariable UUID id) {
         return ApiResponses.fromData(officeService.getOfficeById(id), "Office not found");
     }
 
-    @DeleteMapping(value = "/delete/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> deleteOffice(@PathVariable UUID id) {
         return ApiResponses.fromMessage(officeService.deleteOffice(id), HttpStatus.OK);
     }

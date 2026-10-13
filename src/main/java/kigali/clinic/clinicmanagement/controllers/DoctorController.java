@@ -5,67 +5,64 @@ import kigali.clinic.clinicmanagement.services.DoctorService;
 import kigali.clinic.clinicmanagement.utils.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
 @RestController
-@RequestMapping(value = {"/api/doctor", "/api/doctors"})
+@RequestMapping({"/api/doctor", "/api/doctors"})
 public class DoctorController {
 
     @Autowired
     private DoctorService doctorService;
 
-    @PostMapping(value = "/save", consumes = MediaType.APPLICATION_JSON_VALUE,
-            produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping("/save")
     public ResponseEntity<?> saveDoctor(@RequestBody Doctor doctor) {
         return ApiResponses.fromMessage(doctorService.saveDoctor(doctor), HttpStatus.CREATED);
     }
 
-    @PutMapping(value = "/update/{id}", consumes = MediaType.APPLICATION_JSON_VALUE,
-            produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping("/update/{id}")
     public ResponseEntity<?> updateDoctor(@PathVariable UUID id, @RequestBody Doctor doctor) {
         return ApiResponses.fromMessage(doctorService.updateDoctor(id, doctor), HttpStatus.OK);
     }
 
-    @GetMapping(value = "/all", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping("/all")
     public ResponseEntity<?> getAllDoctors() {
         return ResponseEntity.ok(doctorService.getAllDoctors());
     }
 
-    @GetMapping(value = "/by-specialization", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping("/by-specialization")
     public ResponseEntity<?> getDoctorsBySpecialization(@RequestParam String name) {
         return ResponseEntity.ok(doctorService.getDoctorsBySpecialization(name));
     }
 
-    @GetMapping(value = "/without-office", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping("/without-office")
     public ResponseEntity<?> getDoctorsWithoutOffice() {
         return ResponseEntity.ok(doctorService.getDoctorsWithoutOffice());
     }
 
-    @PutMapping(value = "/{doctorId}/specializations/{specializationId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping("/{doctorId}/specializations/{specializationId}")
     public ResponseEntity<?> addSpecialization(@PathVariable UUID doctorId, @PathVariable UUID specializationId) {
         return ApiResponses.fromMessage(doctorService.addSpecialization(doctorId, specializationId), HttpStatus.OK);
     }
 
-    @DeleteMapping(value = "/{doctorId}/specializations/{specializationId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping("/{doctorId}/specializations/{specializationId}")
     public ResponseEntity<?> removeSpecialization(@PathVariable UUID doctorId, @PathVariable UUID specializationId) {
         return ApiResponses.fromMessage(doctorService.removeSpecialization(doctorId, specializationId), HttpStatus.OK);
     }
 
-    @PatchMapping(value = "/{doctorId}/office", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PatchMapping("/{doctorId}/office")
     public ResponseEntity<?> changeOffice(@PathVariable UUID doctorId, @RequestParam String officeNumber) {
         return ApiResponses.fromMessage(doctorService.changeOffice(doctorId, officeNumber), HttpStatus.OK);
     }
 
-    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping("/{id}")
     public ResponseEntity<?> getDoctorById(@PathVariable UUID id) {
         return ApiResponses.fromData(doctorService.getDoctorById(id), DoctorService.DOCTOR_NOT_FOUND);
     }
 
-    @DeleteMapping(value = "/delete/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> deleteDoctor(@PathVariable UUID id) {
         return ApiResponses.fromMessage(doctorService.deleteDoctor(id), HttpStatus.OK);
     }

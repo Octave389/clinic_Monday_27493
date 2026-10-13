@@ -10,7 +10,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,37 +18,34 @@ import java.util.Map;
 import java.util.UUID;
 
 @RestController
-@RequestMapping(value = {"/api/appointment", "/api/appointments"})
+@RequestMapping({"/api/appointment", "/api/appointments"})
 public class AppointmentController {
 
     @Autowired
     private AppointmentService appointmentService;
 
-    @PostMapping(value = "/save", consumes = MediaType.APPLICATION_JSON_VALUE,
-            produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping("/save")
     public ResponseEntity<?> saveAppointment(@RequestBody Appointment appointment) {
         return ApiResponses.fromMessage(appointmentService.saveAppointment(appointment), HttpStatus.CREATED);
     }
 
-    @PutMapping(value = "/update/{id}", consumes = MediaType.APPLICATION_JSON_VALUE,
-            produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping("/update/{id}")
     public ResponseEntity<?> updateAppointment(@PathVariable UUID id, @RequestBody Appointment appointment) {
         return ApiResponses.fromMessage(appointmentService.updateAppointment(id, appointment), HttpStatus.OK);
     }
 
-    @GetMapping(value = "/all", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping("/all")
     public ResponseEntity<?> getAllAppointments() {
         return ResponseEntity.ok(appointmentService.getAllAppointments());
     }
 
-    // Spring turns the text into the enum; ApiExceptionHandler answers an unknown status with 400
-    @GetMapping(value = "/by-status", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping("/by-status")
     public ResponseEntity<?> getAppointmentsByStatus(@RequestParam AppointmentStatus status) {
         return ResponseEntity.ok(appointmentService.getAppointmentsByStatus(status));
     }
 
     // a badly written date throws DateTimeParseException, which ApiExceptionHandler turns into 400
-    @GetMapping(value = "/between", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping("/between")
     public ResponseEntity<?> getAppointmentsBetween(@RequestParam String start, @RequestParam String end) {
 
         LocalDate startDate = LocalDate.parse(start.trim());
@@ -62,19 +58,19 @@ public class AppointmentController {
         return ResponseEntity.ok(appointmentService.getAppointmentsBetween(startDate, endDate));
     }
 
-    @GetMapping(value = "/stats/by-status", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping("/stats/by-status")
     public ResponseEntity<?> getAppointmentCountsByStatus() {
         return ResponseEntity.ok(appointmentService.getAppointmentCountsByStatus());
     }
 
-    @PatchMapping(value = "/cancel-day", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PatchMapping("/cancel-day")
     public ResponseEntity<?> cancelDoctorDay(@RequestParam UUID doctorId,
                                              @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
         return ResponseEntity.ok(Map.of("message", appointmentService.cancelDoctorDay(doctorId, date)));
     }
 
     // bonus: sort arrives as "property,direction", e.g. appointmentDate,desc
-    @GetMapping(value = "/page", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping("/page")
     public ResponseEntity<?> getAppointmentsPage(@RequestParam(defaultValue = "0") int page,
                                                  @RequestParam(defaultValue = "5") int size,
                                                  @RequestParam(defaultValue = "appointmentDate,asc") String sort) {
@@ -98,18 +94,29 @@ public class AppointmentController {
         return ResponseEntity.ok(appointmentService.getAppointmentsPage(pageable));
     }
 
-    @DeleteMapping(value = "/cancelled-before", produces = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping("/cancelled-before")
     public ResponseEntity<?> deleteCancelledBefore(
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
         return ResponseEntity.ok(Map.of("message", appointmentService.deleteCancelledBefore(date)));
     }
 
-    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getAppointmentById(@PathVariable UUID id) {
-        return ApiResponses.fromData(appointmentService.getAppointmentById(id), "Appointment not found");
+    @PatchMapping("/{id}/status")
+    public ResponseEntity<?> changeStatus(@PathVariable UUID id, @RequestParam AppointmentStatus status) {
+        return ApiResponses.fromMessage(appointmentService.changeStatus(id, status), HttpStatus.OK);
     }
 
-    @DeleteMapping(value = "/delete/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PatchMapping("/{id}/reschedule")
+    public ResponseEntity<?> reschedule(@PathVariable UUID id,
+                                        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate newDate) {
+        return ApiResponses.fromMessage(appointmentService.reschedule(id, newDate), HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getAppointmentById(@PathVariable UUID id) {
+        return ApiResponses.fromData(appointmentService.getAppointmentById(id), AppointmentService.APPOINTMENT_NOT_FOUND);
+    }
+
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> deleteAppointment(@PathVariable UUID id) {
         return ApiResponses.fromMessage(appointmentService.deleteAppointment(id), HttpStatus.OK);
     }
