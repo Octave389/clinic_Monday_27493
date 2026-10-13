@@ -7,6 +7,7 @@ import kigali.clinic.clinicmanagement.models.Patient;
 import kigali.clinic.clinicmanagement.repositories.AppointmentRepository;
 import kigali.clinic.clinicmanagement.repositories.DoctorRepository;
 import kigali.clinic.clinicmanagement.repositories.PatientRepository;
+import kigali.clinic.clinicmanagement.repositories.PrescriptionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -43,6 +44,9 @@ public class AppointmentService {
 
     @Autowired
     private DoctorRepository doctorRepo;
+
+    @Autowired
+    private PrescriptionRepository prescriptionRepo;
 
     @Transactional
     public String saveAppointment(Appointment appointment) {
@@ -224,6 +228,11 @@ public class AppointmentService {
 
         if (existing == null) {
             return APPOINTMENT_NOT_FOUND;
+        }
+
+        // C4
+        if (prescriptionRepo.existsByAppointmentId(id)) {
+            return "That appointment has prescriptions, delete them first";
         }
 
         appointmentRepo.delete(existing);

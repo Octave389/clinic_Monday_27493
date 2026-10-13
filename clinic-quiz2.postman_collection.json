@@ -17,6 +17,7 @@
     { "key": "dianeClaireApptId", "value": "b8072577-85cd-4e5b-ae9a-c1d837e958e3" },
     { "key": "olivierClaireApptId", "value": "e3781cc6-121a-442b-9dff-bdb862e32a4c" },
     { "key": "completedApptId", "value": "dea258ba-6db9-432f-a38b-168d80caf377" },
+    { "key": "prescriptionId", "value": "b349ddd7-be84-41a9-a7c7-c9e2590f1fe8" },
     { "key": "unknownId", "value": "00000000-0000-0000-0000-000000000000" }
   ],
   "item": [
@@ -338,6 +339,183 @@
               "host": ["{{baseUrl}}"],
               "path": ["api", "appointments", "{{dianeEricApptId}}", "reschedule"],
               "query": [{ "key": "newDate", "value": "2026-10-22" }]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Part C - Prescriptions",
+      "item": [
+        {
+          "name": "C1 Write a prescription for Jean's COMPLETED appointment (201)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"medicineName\": \"Amoxicillin\",\n  \"dosage\": \"1 tablet, 3 times a day\",\n  \"durationDays\": 7\n}" },
+            "url": {
+              "raw": "{{baseUrl}}/api/prescriptions/save?appointmentId={{completedApptId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "prescriptions", "save"],
+              "query": [{ "key": "appointmentId", "value": "{{completedApptId}}" }]
+            }
+          }
+        },
+        {
+          "name": "C1 Appointment is not COMPLETED (400)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"medicineName\": \"Amoxicillin\",\n  \"dosage\": \"1 tablet, 3 times a day\",\n  \"durationDays\": 7\n}" },
+            "url": {
+              "raw": "{{baseUrl}}/api/prescriptions/save?appointmentId={{dianeAliceApptId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "prescriptions", "save"],
+              "query": [{ "key": "appointmentId", "value": "{{dianeAliceApptId}}" }]
+            }
+          }
+        },
+        {
+          "name": "C1 Unknown appointment (404)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"medicineName\": \"Amoxicillin\",\n  \"dosage\": \"1 tablet, 3 times a day\",\n  \"durationDays\": 7\n}" },
+            "url": {
+              "raw": "{{baseUrl}}/api/prescriptions/save?appointmentId={{unknownId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "prescriptions", "save"],
+              "query": [{ "key": "appointmentId", "value": "{{unknownId}}" }]
+            }
+          }
+        },
+        {
+          "name": "C2 Prescriptions of Jean's appointment (saves newest id)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "// keep the newest prescription's id for the C4 requests",
+                  "const list = pm.response.json();",
+                  "if (Array.isArray(list) && list.length) {",
+                  "    list.sort((a, b) => a.createdAt.localeCompare(b.createdAt));",
+                  "    pm.collectionVariables.set('prescriptionId', list[list.length - 1].id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/prescriptions/appointment/{{completedApptId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "prescriptions", "appointment", "{{completedApptId}}"]
+            }
+          }
+        },
+        {
+          "name": "C2 Appointment without prescriptions -> []",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/prescriptions/appointment/{{dianeAliceApptId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "prescriptions", "appointment", "{{dianeAliceApptId}}"]
+            }
+          }
+        },
+        {
+          "name": "C2 Unknown appointment (404)",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/prescriptions/appointment/{{unknownId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "prescriptions", "appointment", "{{unknownId}}"]
+            }
+          }
+        },
+        {
+          "name": "C3 Prescription history of Diane (ssNumber)",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/prescriptions/patient/{{ssNumber}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "prescriptions", "patient", "{{ssNumber}}"]
+            }
+          }
+        },
+        {
+          "name": "C3 Patient without prescriptions -> [] (1004)",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/prescriptions/patient/1004",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "prescriptions", "patient", "1004"]
+            }
+          }
+        },
+        {
+          "name": "C4 Update the new prescription (200)",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"medicineName\": \"Amoxicillin\",\n  \"dosage\": \"2 tablets, twice a day\",\n  \"durationDays\": 5\n}" },
+            "url": {
+              "raw": "{{baseUrl}}/api/prescriptions/update/{{prescriptionId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "prescriptions", "update", "{{prescriptionId}}"]
+            }
+          }
+        },
+        {
+          "name": "C4 Update unknown prescription (404)",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"medicineName\": \"Amoxicillin\",\n  \"dosage\": \"2 tablets, twice a day\",\n  \"durationDays\": 5\n}" },
+            "url": {
+              "raw": "{{baseUrl}}/api/prescriptions/update/{{unknownId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "prescriptions", "update", "{{unknownId}}"]
+            }
+          }
+        },
+        {
+          "name": "C4 Delete Jean's appointment, it has prescriptions (409)",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{baseUrl}}/api/appointments/delete/{{completedApptId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "appointments", "delete", "{{completedApptId}}"]
+            }
+          }
+        },
+        {
+          "name": "C4 Delete the new prescription (200)",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{baseUrl}}/api/prescriptions/delete/{{prescriptionId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "prescriptions", "delete", "{{prescriptionId}}"]
+            }
+          }
+        },
+        {
+          "name": "C4 Delete it again (404)",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{baseUrl}}/api/prescriptions/delete/{{prescriptionId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "prescriptions", "delete", "{{prescriptionId}}"]
             }
           }
         }

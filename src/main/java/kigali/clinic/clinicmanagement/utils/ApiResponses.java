@@ -33,7 +33,7 @@ public final class ApiResponses {
             return successStatus;
         } else if (containsAny(text, "not found", "does not exist")) {
             return HttpStatus.NOT_FOUND;
-        } else if (containsAny(text, "already", "taken by", "does not have")) {
+        } else if (containsAny(text, "already", "taken by", "does not have", "has prescriptions")) {
             return HttpStatus.CONFLICT;
         } else {
             return HttpStatus.BAD_REQUEST;
