@@ -1,6 +1,7 @@
 package kigali.clinic.clinicmanagement.repositories;
 
 import kigali.clinic.clinicmanagement.models.Appointment;
+import kigali.clinic.clinicmanagement.models.AppointmentStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -14,13 +15,16 @@ import java.util.UUID;
 @Repository
 public interface AppointmentRepository extends JpaRepository<Appointment, UUID> {
 
-    boolean existsByDoctorIdAndDateAndStatusNot(UUID doctorId, LocalDateTime date, String status);
+    // A4: appointmentDate carries a time, so "that date" is the range from the start to the end of the day
+    boolean existsByDoctorIdAndAppointmentDateBetweenAndStatusNot(
+            UUID doctorId, LocalDateTime dayStart, LocalDateTime dayEnd, AppointmentStatus status);
 
-    boolean existsByDoctorIdAndDateAndStatusNotAndIdNot(UUID doctorId, LocalDateTime date, String status, UUID id);
+    boolean existsByDoctorIdAndAppointmentDateBetweenAndStatusNotAndIdNot(
+            UUID doctorId, LocalDateTime dayStart, LocalDateTime dayEnd, AppointmentStatus status, UUID id);
 
-    List<Appointment> findByStatusOrderByDateAsc(String status);
+    List<Appointment> findByStatusOrderByAppointmentDateAsc(AppointmentStatus status);
 
-    List<Appointment> findByDateBetweenOrderByDateAsc(LocalDateTime start, LocalDateTime end);
+    List<Appointment> findByAppointmentDateBetweenOrderByAppointmentDateAsc(LocalDateTime start, LocalDateTime end);
 
     boolean existsByDoctorId(UUID doctorId);
 
@@ -31,13 +35,16 @@ public interface AppointmentRepository extends JpaRepository<Appointment, UUID> 
             + "GROUP BY a.status ORDER BY COUNT(a) DESC, a.status ASC")
     List<Object[]> countAppointmentsPerStatus();
 
-    // C4: date carries a time, so the day is matched as [dayStart, nextDayStart).
+    // C4: appointmentDate carries a time, so the day is matched as [dayStart, nextDayStart).
     // Bulk updates skip @PreUpdate, which is why updatedAt is set here.
     @Modifying(clearAutomatically = true)
-    @Query("UPDATE Appointment a SET a.status = 'CANCELLED', a.updatedAt = :now "
+    @Query("UPDATE Appointment a "
+            + "SET a.status = kigali.clinic.clinicmanagement.models.AppointmentStatus.CANCELLED, "
+            + "a.updatedAt = :now "
             + "WHERE a.doctor.id = :doctorId "
-            + "AND a.date >= :dayStart AND a.date < :nextDayStart "
-            + "AND a.status NOT IN ('COMPLETED', 'CANCELLED')")
+            + "AND a.appointmentDate >= :dayStart AND a.appointmentDate < :nextDayStart "
+            + "AND a.status NOT IN (kigali.clinic.clinicmanagement.models.AppointmentStatus.COMPLETED, "
+            + "kigali.clinic.clinicmanagement.models.AppointmentStatus.CANCELLED)")
     int cancelDoctorDay(@Param("doctorId") UUID doctorId,
                         @Param("dayStart") LocalDateTime dayStart,
                         @Param("nextDayStart") LocalDateTime nextDayStart,

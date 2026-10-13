@@ -1,6 +1,7 @@
 package kigali.clinic.clinicmanagement.controllers;
 
 import kigali.clinic.clinicmanagement.models.Appointment;
+import kigali.clinic.clinicmanagement.models.AppointmentStatus;
 import kigali.clinic.clinicmanagement.services.AppointmentService;
 import kigali.clinic.clinicmanagement.utils.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,8 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.format.DateTimeParseException;
 import java.util.Map;
 import java.util.UUID;
 
@@ -40,38 +39,24 @@ public class AppointmentController {
         return ResponseEntity.ok(appointmentService.getAllAppointments());
     }
 
+    // Spring turns the text into the enum; ApiExceptionHandler answers an unknown status with 400
     @GetMapping(value = "/by-status", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getAppointmentsByStatus(@RequestParam String status) {
-
-        String normalized = status.trim().toUpperCase();
-
-        if (!appointmentService.isValidStatus(normalized)) {
-            return ResponseEntity.badRequest().body(
-                    Map.of("message", "Status must be one of SCHEDULED, CONFIRMED, COMPLETED, CANCELLED"));
-        }
-
-        return ResponseEntity.ok(appointmentService.getAppointmentsByStatus(normalized));
+    public ResponseEntity<?> getAppointmentsByStatus(@RequestParam AppointmentStatus status) {
+        return ResponseEntity.ok(appointmentService.getAppointmentsByStatus(status));
     }
 
+    // a badly written date throws DateTimeParseException, which ApiExceptionHandler turns into 400
     @GetMapping(value = "/between", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getAppointmentsBetween(@RequestParam String start, @RequestParam String end) {
 
-        LocalDate startDate;
-        LocalDate endDate;
-
-        try {
-            startDate = LocalDate.parse(start.trim());
-            endDate = LocalDate.parse(end.trim());
-        } catch (DateTimeParseException e) {
-            return ResponseEntity.badRequest().body(Map.of("message", "Dates must use the format yyyy-MM-dd"));
-        }
+        LocalDate startDate = LocalDate.parse(start.trim());
+        LocalDate endDate = LocalDate.parse(end.trim());
 
         if (endDate.isBefore(startDate)) {
             return ResponseEntity.badRequest().body(Map.of("message", "End date must not be before start date"));
         }
 
-        return ResponseEntity.ok(appointmentService.getAppointmentsBetween(
-                startDate.atStartOfDay(), endDate.atTime(LocalTime.MAX)));
+        return ResponseEntity.ok(appointmentService.getAppointmentsBetween(startDate, endDate));
     }
 
     @GetMapping(value = "/stats/by-status", produces = MediaType.APPLICATION_JSON_VALUE)

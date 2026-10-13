@@ -100,18 +100,18 @@
       }
     },
     {
-      "name": "Setup - Create appointment",
+      "name": "A4 Save appointment (doctor already booked that date -> 409)",
       "request": {
         "method": "POST",
         "header": [{ "key": "Content-Type", "value": "application/json" }],
         "body": {
           "mode": "raw",
-          "raw": "{\n  \"patient\": { \"id\": \"32394660-3043-45c0-90dd-a391674dbede\" },\n  \"doctor\": { \"id\": \"PUT-DOCTOR-ID-HERE\" },\n  \"date\": \"2026-10-20T09:00:00\",\n  \"reason\": \"Checkup\"\n}"
+          "raw": "{\n  \"patient\": { \"id\": \"32394660-3043-45c0-90dd-a391674dbede\" },\n  \"doctor\": { \"id\": \"{{doctorId}}\" },\n  \"appointmentDate\": \"2026-10-20T15:00:00\",\n  \"reason\": \"Checkup\"\n}"
         },
         "url": {
-          "raw": "{{baseUrl}}/api/appointment/save",
+          "raw": "{{baseUrl}}/api/appointments/save",
           "host": ["{{baseUrl}}"],
-          "path": ["api", "appointment", "save"]
+          "path": ["api", "appointments", "save"]
         }
       }
     },
