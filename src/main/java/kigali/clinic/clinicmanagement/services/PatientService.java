@@ -92,8 +92,8 @@ public class PatientService {
         return Optional.of(patientRepo.findPatientsOfDoctor(doctorId));
     }
 
-    public Patient getPatientById(UUID id) {
-        return patientRepo.findById(id).orElse(null);
+    public Optional<Patient> getPatientById(UUID id) {
+        return patientRepo.findById(id);
     }
 
     @Transactional

@@ -113,7 +113,7 @@ public class AppointmentController {
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getAppointmentById(@PathVariable UUID id) {
-        return ApiResponses.fromData(appointmentService.getAppointmentById(id), AppointmentService.APPOINTMENT_NOT_FOUND);
+        return ApiResponses.fromData(appointmentService.getAppointmentById(id).orElse(null), AppointmentService.APPOINTMENT_NOT_FOUND);
     }
 
     @DeleteMapping("/delete/{id}")

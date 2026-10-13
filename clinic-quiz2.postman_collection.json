@@ -606,6 +606,52 @@
           }
         }
       ]
+    },
+    {
+      "name": "Bonus",
+      "item": [
+        {
+          "name": "Bonus Most prescribed medicines",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/prescriptions/stats/top-medicines",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "prescriptions", "stats", "top-medicines"]
+            }
+          }
+        },
+        {
+          "name": "Bonus Doctor workload in October",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/doctors/workload?start=2026-10-01&end=2026-10-31",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "doctors", "workload"],
+              "query": [
+                { "key": "start", "value": "2026-10-01" },
+                { "key": "end", "value": "2026-10-31" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Bonus Doctor workload in October and November",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/doctors/workload?start=2026-10-01&end=2026-11-30",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "doctors", "workload"],
+              "query": [
+                { "key": "start", "value": "2026-10-01" },
+                { "key": "end", "value": "2026-11-30" }
+              ]
+            }
+          }
+        }
+      ]
     }
   ]
 }

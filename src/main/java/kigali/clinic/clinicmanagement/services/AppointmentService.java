@@ -235,8 +235,8 @@ public class AppointmentService {
                         patient, LocalDate.now().atStartOfDay(), List.of(SCHEDULED, CONFIRMED)));
     }
 
-    public Appointment getAppointmentById(UUID id) {
-        return appointmentRepo.findById(id).orElse(null);
+    public Optional<Appointment> getAppointmentById(UUID id) {
+        return appointmentRepo.findById(id);
     }
 
     @Transactional

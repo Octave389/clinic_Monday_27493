@@ -44,7 +44,7 @@ public class OfficeController {
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getOfficeById(@PathVariable UUID id) {
-        return ApiResponses.fromData(officeService.getOfficeById(id), "Office not found");
+        return ApiResponses.fromData(officeService.getOfficeById(id).orElse(null), "Office not found");
     }
 
     @DeleteMapping("/delete/{id}")

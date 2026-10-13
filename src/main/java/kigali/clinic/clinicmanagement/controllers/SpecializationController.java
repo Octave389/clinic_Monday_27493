@@ -40,7 +40,7 @@ public class SpecializationController {
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getSpecializationById(@PathVariable UUID id) {
-        return ApiResponses.fromData(specializationService.getSpecializationById(id), "Specialization not found");
+        return ApiResponses.fromData(specializationService.getSpecializationById(id).orElse(null), "Specialization not found");
     }
 
     @DeleteMapping("/delete/{id}")

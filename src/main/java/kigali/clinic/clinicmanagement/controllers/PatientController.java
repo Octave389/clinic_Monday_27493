@@ -60,7 +60,7 @@ public class PatientController {
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getPatientById(@PathVariable UUID id) {
-        return ApiResponses.fromData(patientService.getPatientById(id), "Patient not found");
+        return ApiResponses.fromData(patientService.getPatientById(id).orElse(null), "Patient not found");
     }
 
     @DeleteMapping("/delete/{id}")

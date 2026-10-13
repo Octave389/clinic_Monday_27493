@@ -29,7 +29,6 @@ public class PrescriptionService {
     @Autowired
     private AppointmentRepository appointmentRepo;
 
-    // C1: the date and the appointment come from the server, never from the body
     @Transactional
     public String savePrescription(UUID appointmentId, Prescription prescription) {
 
@@ -59,18 +58,20 @@ public class PrescriptionService {
         return "Prescription saved successfully";
     }
 
-    // C2: empty means the appointment does not exist; an empty list means it has no prescriptions
     public Optional<List<Prescription>> getPrescriptionsOfAppointment(UUID appointmentId) {
         return appointmentRepo.findById(appointmentId).map(prescriptionRepo::findByAppointment);
     }
 
-    // C3
+
     public List<Prescription> getPatientHistory(String ssNumber) {
         return prescriptionRepo.findPatientHistory(ssNumber.trim());
     }
 
-    // C4: only the medicine part changes; the issued date and the appointment stay
-    @Transactional
+    public List<Object[]> getTopMedicines() {
+        return prescriptionRepo.findTopMedicines();
+    }
+
+     @Transactional
     public String updatePrescription(UUID id, Prescription prescription) {
 
         Prescription existing = prescriptionRepo.findById(id).orElse(null);

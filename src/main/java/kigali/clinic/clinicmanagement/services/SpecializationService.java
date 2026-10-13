@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import static kigali.clinic.clinicmanagement.utils.Validations.isBlank;
@@ -71,8 +72,8 @@ public class SpecializationService {
         return specializationRepo.findUnusedSpecializations();
     }
 
-    public Specialization getSpecializationById(UUID id) {
-        return specializationRepo.findById(id).orElse(null);
+    public Optional<Specialization> getSpecializationById(UUID id) {
+        return specializationRepo.findById(id);
     }
 
     @Transactional

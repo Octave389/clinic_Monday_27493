@@ -89,8 +89,8 @@ public class OfficeService {
         return officeRepo.findOfficesByAppointmentCount(PageRequest.of(0, 1)).stream().findFirst();
     }
 
-    public Office getOfficeById(UUID id) {
-        return officeRepo.findById(id).orElse(null);
+    public Optional<Office> getOfficeById(UUID id) {
+        return officeRepo.findById(id);
     }
 
     @Transactional

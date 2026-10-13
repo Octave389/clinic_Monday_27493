@@ -11,10 +11,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
+import static kigali.clinic.clinicmanagement.utils.Dates.endOfDay;
 import static kigali.clinic.clinicmanagement.utils.Validations.containsDigit;
 import static kigali.clinic.clinicmanagement.utils.Validations.isBlank;
 import static kigali.clinic.clinicmanagement.utils.Validations.normalize;
@@ -120,8 +123,13 @@ public class DoctorService {
         return doctorRepo.searchByName(name.trim());
     }
 
-    public Doctor getDoctorById(UUID id) {
-        return doctorRepo.findById(id).orElse(null);
+    // bonus: both dates are inclusive, so the range runs to the very end of the last day
+    public List<Object[]> getWorkload(LocalDate start, LocalDate end) {
+        return doctorRepo.findDoctorWorkload(start.atStartOfDay(), endOfDay(end));
+    }
+
+    public Optional<Doctor> getDoctorById(UUID id) {
+        return doctorRepo.findById(id);
     }
 
     // A1 + A2: Doctor owns the join table, so editing its list and saving the doctor writes the link

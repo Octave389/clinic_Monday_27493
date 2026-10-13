@@ -53,6 +53,12 @@ public class DoctorController {
         return ResponseEntity.ok(doctorService.searchDoctors(name));
     }
 
+    @GetMapping("/workload")
+    public ResponseEntity<?> getWorkload(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate start,
+                                         @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate end) {
+        return ResponseEntity.ok(doctorService.getWorkload(start, end));
+    }
+
     @GetMapping("/{doctorId}/agenda")
     public ResponseEntity<?> getAgenda(@PathVariable UUID doctorId,
                                        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
@@ -77,7 +83,7 @@ public class DoctorController {
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getDoctorById(@PathVariable UUID id) {
-        return ApiResponses.fromData(doctorService.getDoctorById(id), DoctorService.DOCTOR_NOT_FOUND);
+        return ApiResponses.fromData(doctorService.getDoctorById(id).orElse(null), DoctorService.DOCTOR_NOT_FOUND);
     }
 
     @DeleteMapping("/delete/{id}")
